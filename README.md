@@ -19,6 +19,14 @@ Personal finance tracker for recording income and expenses.
 - Large expense notifications via events
 - JSON persistence
 
+## Tests
+
+Unit tests are in `FinanceTracker.Tests`. Run them with:
+
+```bash
+dotnet test
+```
+
 ## Database
 
 The `sql/` folder contains the SQL Server schema and scripts — see [sql/README.md](sql/README.md).
