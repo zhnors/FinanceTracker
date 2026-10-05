@@ -1,6 +1,6 @@
 # FinanceTracker
 
-Personal finance tracker for recording income and expenses.
+Personal finance tracker built with C# and SQL Server.
 
 > 🚧 Work in progress — currently a console application, being rewritten as an ASP.NET Core Web API with Entity Framework Core.
 
