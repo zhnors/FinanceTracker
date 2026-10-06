@@ -3,12 +3,11 @@ using System.Text.Json;
 
 namespace FinanceTracker
 {
-    public class FinanceService
+    public class FinanceService : IFinanceService
     {
         readonly decimal largeExpenseLimit = 10000;
         private const int DEFAULT_TOP_COUNT = 3;
 
-        public delegate void LargeExpenseDelegate(FinancialRecord record);
         public event LargeExpenseDelegate? LargeExpense;
 
         List<FinancialRecord> RecordList = new List<FinancialRecord>();
@@ -47,7 +46,7 @@ namespace FinanceTracker
 
         public void ShowAllRecords()
         {
-            if (RecordList == null) 
+            if (RecordList == null)
             {
                 Console.WriteLine("Record list is empty");
 
@@ -84,7 +83,7 @@ namespace FinanceTracker
         public void SearchByDate(DateTime date)
         {
             if (date > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
-            if(date == default) throw new ArgumentException("Date is out of range");
+            if (date == default) throw new ArgumentException("Date is out of range");
 
             IEnumerable<FinancialRecord> byDateList = RecordList.Where(record => record.Date.Date == date.Date);
 
@@ -105,7 +104,7 @@ namespace FinanceTracker
         public void SearchByDate(DateTime fromDate, DateTime toDate)
         {
             if (fromDate > DateTime.Now || toDate > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
-            if (fromDate > toDate) throw new ArgumentException ("The start date must be earlier than or equal to the end date.");
+            if (fromDate > toDate) throw new ArgumentException("The start date must be earlier than or equal to the end date.");
 
             IEnumerable<FinancialRecord> byDateList = RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date);
 
@@ -176,7 +175,7 @@ namespace FinanceTracker
                 {
                     income -= record.Amount;
                 }
-                 
+
                 else income += record.Amount;
             }
 
@@ -223,13 +222,13 @@ namespace FinanceTracker
                 WriteIndented = true
             });
 
-           await File.WriteAllTextAsync(path, json);
+            await File.WriteAllTextAsync(path, json);
         }
 
         public async Task LoadFromJsonFileAsync(string path)
         {
             if (string.IsNullOrWhiteSpace(path)) throw new ArgumentException();
-            if(!File.Exists(path)) throw new FileNotFoundException();
+            if (!File.Exists(path)) throw new FileNotFoundException();
 
             var json = await File.ReadAllTextAsync(path);
 
@@ -237,7 +236,7 @@ namespace FinanceTracker
 
             var dtoRecordList = JsonSerializer.Deserialize<List<FinancialRecordDto>>(json);
 
-            if(dtoRecordList == null) throw new FormatException();
+            if (dtoRecordList == null) throw new FormatException();
 
             var recordList = FromDto(dtoRecordList);
 
@@ -287,7 +286,7 @@ namespace FinanceTracker
                 else throw new FormatException();
             }
 
-             return dtoRecords;           
+            return dtoRecords;
         }
 
         private List<FinancialRecord> FromDto(List<FinancialRecordDto> dtoRecords)
@@ -358,7 +357,7 @@ namespace FinanceTracker
 
             if (record.Date > DateTime.Now) throw new ArgumentOutOfRangeException(nameof(record.Date));
 
-            if(record.Date == default) throw new ArgumentOutOfRangeException(nameof(record.Date));
+            if (record.Date == default) throw new ArgumentOutOfRangeException(nameof(record.Date));
         }
     }
 }
