@@ -12,13 +12,13 @@ namespace FinanceTracker
 
         bool DeleteRecord(int id);
 
-        void ShowAllRecords();
+        IReadOnlyList<FinancialRecord> GetAllRecords();
 
-        void SearchByCategory(string category);
+        IReadOnlyList<FinancialRecord> SearchByCategory(string category);
 
-        void SearchByDate(DateTime date);
+        IReadOnlyList<FinancialRecord> SearchByDate(DateTime date);
 
-        void SearchByDate(DateTime fromDate, DateTime toDate);
+        IReadOnlyList<FinancialRecord> SearchByDate(DateTime fromDate, DateTime toDate);
 
         decimal IncomeAmount();
 
@@ -26,7 +26,7 @@ namespace FinanceTracker
 
         decimal TotalAmount();
 
-        void ExpenseTop();
+        IReadOnlyList<ExpenseRecord> GetTopExpenses(int count = 3);
 
         void DeleteAllRecords();
 

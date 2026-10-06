@@ -6,16 +6,10 @@ namespace FinanceTracker
     public class FinanceService : IFinanceService
     {
         readonly decimal largeExpenseLimit = 10000;
-        private const int DEFAULT_TOP_COUNT = 3;
 
         public event LargeExpenseDelegate? LargeExpense;
 
         List<FinancialRecord> RecordList = new List<FinancialRecord>();
-
-        public void LargeExpenseNotif(FinancialRecord record)
-        {
-            Console.WriteLine($"Large expense detected: {record.Category} - {record.Amount}");
-        }
 
         public void AddRecord(FinancialRecord record)
         {
@@ -44,82 +38,32 @@ namespace FinanceTracker
             return isFound;
         }
 
-        public void ShowAllRecords()
+        public IReadOnlyList<FinancialRecord> GetAllRecords()
         {
-            if (RecordList == null)
-            {
-                Console.WriteLine("Record list is empty");
-
-                return;
-            }
-
-            foreach (var record in RecordList)
-            {
-                Console.WriteLine(record.Id + "\n" + record.Title + "\n" + record.Category + "\n" + record.Amount + "\n" + record.Date + "\n" + record.Description + "\n");
-                Console.WriteLine();
-            }
+            return RecordList.ToList();
         }
 
-        public void SearchByCategory(string category)
+        public IReadOnlyList<FinancialRecord> SearchByCategory(string category)
         {
-            if (string.IsNullOrEmpty(category)) throw new ArgumentNullException();
+           if (string.IsNullOrEmpty(category)) throw new ArgumentNullException();
 
-            IEnumerable<FinancialRecord> byCatList = RecordList.Where(record => record.Category == category);
-
-            if (!byCatList.Any())
-            {
-                Console.WriteLine("Records not found");
-
-                return;
-            }
-
-            foreach (var record in byCatList)
-            {
-                Console.WriteLine(record.Id + "\n" + record.Title + "\n" + record.Category + "\n" + record.Amount + "\n" + record.Date + "\n" + record.Description + "\n");
-                Console.WriteLine();
-            }
+           return RecordList.Where(record => record.Category == category).ToList();       
         }
 
-        public void SearchByDate(DateTime date)
+        public IReadOnlyList<FinancialRecord> SearchByDate(DateTime date)
         {
             if (date > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
             if (date == default) throw new ArgumentException("Date is out of range");
 
-            IEnumerable<FinancialRecord> byDateList = RecordList.Where(record => record.Date.Date == date.Date);
-
-            if (!byDateList.Any())
-            {
-                Console.WriteLine("Records not found");
-
-                return;
-            }
-
-            foreach (var record in byDateList)
-            {
-                Console.WriteLine(record.Id + "\n" + record.Title + "\n" + record.Category + "\n" + record.Amount + "\n" + record.Date + "\n" + record.Description + "\n");
-                Console.WriteLine();
-            }
+            return RecordList.Where(record => record.Date.Date == date.Date).ToList();             
         }
 
-        public void SearchByDate(DateTime fromDate, DateTime toDate)
+        public IReadOnlyList<FinancialRecord> SearchByDate(DateTime fromDate, DateTime toDate)
         {
             if (fromDate > DateTime.Now || toDate > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
             if (fromDate > toDate) throw new ArgumentException("The start date must be earlier than or equal to the end date.");
 
-            IEnumerable<FinancialRecord> byDateList = RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date);
-
-            if (!byDateList.Any())
-            {
-                Console.WriteLine("Records not found");
-
-                return;
-            }
-
-            foreach (var record in byDateList)
-            {
-                Console.WriteLine(record.Id + "\n" + record.Title + "\n" + record.Category + "\n" + record.Amount + "\n" + record.Date + "\n" + record.Description + "\n");
-                Console.WriteLine();
-            }
+            return RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date).ToList();          
         }
 
         public decimal IncomeAmount()
@@ -128,7 +72,6 @@ namespace FinanceTracker
 
             if (!incomeList.Any())
             {
-                Console.WriteLine("Records not found");
                 return 0;
             }
 
@@ -148,25 +91,21 @@ namespace FinanceTracker
 
             if (!expenseList.Any())
             {
-                Console.WriteLine("Records not found");
-
                 return 0;
             }
 
-            decimal income = 0;
+            decimal total = 0;
 
             foreach (var record in expenseList)
             {
-                income += record.Amount;
+                total += record.Amount;
             }
 
-            return income;
+            return total;
         }
 
         public decimal TotalAmount()
         {
-            if (RecordList == null) throw new ArgumentNullException();
-
             decimal income = 0;
 
             foreach (var record in RecordList)
@@ -183,27 +122,13 @@ namespace FinanceTracker
 
         }
 
-        public void ExpenseTop()
+        public IReadOnlyList<ExpenseRecord> GetTopExpenses(int count)
         {
-            var expenseTopList = RecordList
+                return RecordList
                 .OfType<ExpenseRecord>()
                 .OrderByDescending(r => r.Amount)
-                .Take(DEFAULT_TOP_COUNT);
-
-            if (!expenseTopList.Any())
-            {
-                Console.WriteLine("Records not found");
-            }
-            else
-            {
-                foreach (var record in expenseTopList)
-                {
-                    Console.WriteLine(record.Id + "\n" + record.Title + "\n" + record.Category + "\n" + record.Amount + "\n" + record.Date + "\n" + record.Description + "\n");
-                    Console.WriteLine();
-                }
-
-            }
-
+                .Take(count)
+                .ToList();   
         }
 
         public void DeleteAllRecords()
