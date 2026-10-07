@@ -2,7 +2,13 @@
 {
     internal class Program
     {
-        public void RunErrorTests(FinanceService financeService)
+
+        public static void LargeExpenseNotif(FinancialRecord record)
+        {
+            Console.WriteLine($"Large expense detected: {record.Category} - {record.Amount}");
+        }
+
+        public static void RunErrorTests(IFinanceService financeService)
         {
             try
             {
@@ -55,9 +61,9 @@
             }
         }
 
-        public void RunMainDemo(FinanceService financeService)
+        public static void RunMainDemo(IFinanceService financeService)
         {
-            financeService.ShowAllRecords();
+            PrintRecords(financeService.GetAllRecords());
 
             var a = financeService.IncomeAmount();
             Console.WriteLine(a);
@@ -68,30 +74,39 @@
             a = financeService.TotalAmount();
             Console.WriteLine(a);
 
-            financeService.SearchByCategory("Rent");
+            PrintRecords(financeService.SearchByCategory("Rent"));
 
-            financeService.SearchByDate(new DateTime(2026, 7, 20), DateTime.Now);
+            PrintRecords(financeService.SearchByDate(new DateTime(2026, 7, 20), DateTime.Now));
 
-            financeService.ExpenseTop();      
+            PrintRecords(financeService.GetTopExpenses(3));      
         }
 
-        public async Task TestJsonDemo(FinanceService financeService)
+        public static async Task TestJsonDemo(IFinanceService financeService)
         {         
             await financeService.SaveToJsonFileAsync(@"D:\STUDING\Programming\self-study_C#\finance.json");
 
             financeService.DeleteAllRecords();
-            financeService.ShowAllRecords();
+            PrintRecords(financeService.GetAllRecords());
 
             await financeService.LoadFromJsonFileAsync(@"D:\STUDING\Programming\self-study_C#\finance.json");
 
-            financeService.ShowAllRecords();
+            PrintRecords(financeService.GetAllRecords());
         }
 
-        static void Main(string[] args)
+        public static void PrintRecords(IEnumerable<FinancialRecord> records)
         {
-            FinanceService financeService = new FinanceService();
+            foreach (var record in records)
+            {
+                Console.WriteLine(record.Id + "\n" + record.Title + "\n" + record.Category + "\n" + record.Amount + "\n" + record.Date + "\n" + record.Description + "\n");
+                Console.WriteLine();
+            }
+        }
 
-            financeService.LargeExpense += financeService.LargeExpenseNotif;
+        static async Task Main(string[] args)
+        {
+            IFinanceService financeService = new FinanceService();
+
+            financeService.LargeExpense += LargeExpenseNotif;
 
             IncomeRecord income1 = new IncomeRecord
             {
@@ -154,6 +169,10 @@
             financeService.AddRecord(expense1);
             financeService.AddRecord(expense2);
             financeService.AddRecord(expense3);
+
+            RunMainDemo(financeService);
+            RunErrorTests(financeService);
+            await TestJsonDemo(financeService);
         }
     }
 

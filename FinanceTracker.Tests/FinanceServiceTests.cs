@@ -13,7 +13,7 @@ namespace FinanceTracker.Tests
             service = new FinanceService();
         }
 
-        private static IncomeRecord CreateIncome(int id = 1, decimal amount = 30000, string title = "Salary")
+        private static IncomeRecord CreateIncome(int id = 1, decimal amount = 30000, string title = "Salary", string category = "Salary")
         {
             return new IncomeRecord
             {
@@ -21,13 +21,13 @@ namespace FinanceTracker.Tests
                 Title = title,
                 Amount = amount,
                 Date = new DateTime(2026, 7, 20),
-                Category = "Salary",
+                Category = category,
                 Description = "Monthly salary",
                 IncomeType = IncomeTypes.Salary
             };
         }
 
-        private static ExpenseRecord CreateExpense(int id = 2, decimal amount = 12000, string title = "Rent")
+        private static ExpenseRecord CreateExpense(int id = 2, decimal amount = 12000, string title = "Rent", string category = "Rent")
         {
             return new ExpenseRecord
             {
@@ -35,7 +35,7 @@ namespace FinanceTracker.Tests
                 Title = title,
                 Amount = amount,
                 Date = new DateTime(2026, 7, 20),
-                Category = "Rent",
+                Category = category,
                 Description = "Monthly rent",
                 ExpenseType = ExpenseTypes.Rent
             };
@@ -220,6 +220,131 @@ namespace FinanceTracker.Tests
 
 
             Assert.False(service.DeleteRecord(99));
+        }
+
+        [Fact]
+        public void GetAllRecords_ReturnsAllAddedRecords()
+        {
+            service.AddRecord(CreateExpense());
+
+            service.AddRecord(CreateIncome());
+
+
+            var result = service.GetAllRecords();
+
+
+            Assert.Equal(2, result.Count);
+        }
+
+        [Fact]
+        public void GetAllRecords_ReturnsCopy()
+        {
+            service.AddRecord(CreateIncome());
+
+            service.AddRecord(CreateExpense());
+
+
+            var result = service.GetAllRecords();
+
+            service.DeleteAllRecords();
+
+
+            Assert.Equal(2, result.Count);
+        }
+
+        [Fact]
+        public void SearchByCategory_ReturnsOnlyMatchingRecords() 
+        {
+            service.AddRecord(CreateExpense(id: 1, category: "Food"));
+
+            service.AddRecord(CreateIncome(id: 2, category: "Bonus"));
+
+            service.AddRecord(CreateIncome(id: 3, category: "Bonus"));  
+            
+
+            var result = service.SearchByCategory("Bonus");
+
+
+            Assert.Equal(2, result.Count);
+
+            Assert.All(result, r => Assert.Equal("Bonus", r.Category));
+        }
+
+        [Fact]
+        public void SearchByCategory_NoMatches_ReturnsEmptyList()
+        {
+            service.AddRecord(CreateExpense(category: "Food"));
+
+            service.AddRecord(CreateIncome(category: "Bonus"));
+
+
+            var result = service.SearchByCategory("Rent");
+
+
+            Assert.Empty(result);
+        }
+
+        [Fact]
+        public void SearchByDate_Range_ReturnsRecordsWithinRange()
+        {
+            DateTime fromDate = new DateTime(2026, 10, 1);
+
+            DateTime toDate = new DateTime(2026, 10, 7);
+
+            var firstExpense = CreateExpense();
+
+            firstExpense.Date = new DateTime(2026, 7, 20);
+
+            var secondExpense = CreateExpense();
+
+            secondExpense.Date = new DateTime(2026, 8, 20);
+
+            var firstIncome = CreateIncome(id: 1);
+
+            firstIncome.Date = fromDate;
+
+            var secondIncome = CreateIncome(id: 2);
+
+            secondIncome.Date = toDate;
+
+            service.AddRecord(firstExpense);
+
+            service.AddRecord(secondExpense);
+
+            service.AddRecord(firstIncome);
+
+            service.AddRecord(secondIncome);
+
+
+            var result =  service.SearchByDate(fromDate, toDate);
+
+
+            Assert.Equal(2, result.Count);
+
+            Assert.Equal(fromDate, result[0].Date);
+
+            Assert.Equal(toDate, result[1].Date);
+        }
+
+        [Fact]
+        public void GetTopExpenses_ReturnsHighestFirst()
+        {
+            service.AddRecord(CreateExpense(id: 1, amount: 3000));
+
+            service.AddRecord(CreateExpense(id: 2, amount: 6000));
+
+            service.AddRecord(CreateExpense(id: 3, amount: 8000));
+
+            service.AddRecord(CreateExpense(id: 4, amount: 10000));
+
+
+            var result = service.GetTopExpenses(2);
+
+            Assert.Equal(2, result.Count);
+
+            Assert.Equal(10000, result[0].Amount);
+
+            Assert.Equal(8000, result[1].Amount);
         }
 
         [Fact]
