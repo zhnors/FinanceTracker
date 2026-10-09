@@ -327,6 +327,30 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
+        public void GetRecordById_RecordNotFound_ReturnsNull()
+        {
+            service.AddRecord(CreateExpense(id: 1));
+
+            service.AddRecord(CreateExpense(id: 2));
+
+            Assert.Null(service.GetRecordById(3));
+        }
+
+        [Fact]
+        public void GetRecordById_RecordFound_ReturnsRecord()
+        {
+            service.AddRecord(CreateExpense(id: 2));
+
+            service.AddRecord(CreateExpense(id: 3));
+
+            var result = service.GetRecordById(2);
+
+            Assert.NotNull(result);
+
+            Assert.Equal(2, result.Id);
+        }
+
+        [Fact]
         public void GetTopExpenses_ReturnsHighestFirst()
         {
             service.AddRecord(CreateExpense(id: 1, amount: 3000));

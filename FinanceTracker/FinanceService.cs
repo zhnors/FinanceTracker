@@ -66,6 +66,11 @@ namespace FinanceTracker
             return RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date).ToList();          
         }
 
+        public FinancialRecord? GetRecordById(int id)
+        {
+            return RecordList.FirstOrDefault(record => record.Id == id);
+        }
+
         public decimal IncomeAmount()
         {
             IEnumerable<FinancialRecord> incomeList = RecordList.OfType<IncomeRecord>();

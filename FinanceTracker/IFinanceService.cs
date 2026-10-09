@@ -20,6 +20,8 @@ namespace FinanceTracker
 
         IReadOnlyList<FinancialRecord> SearchByDate(DateTime fromDate, DateTime toDate);
 
+        FinancialRecord? GetRecordById(int id);
+
         decimal IncomeAmount();
 
         decimal ExpenseAmount();
