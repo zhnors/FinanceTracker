@@ -10,3 +10,23 @@ GET {{FinanceTracker.Api_HostAddress}}/records/summary
 Accept: application/json
 
 ###
+
+GET {{FinanceTracker.Api_HostAddress}}/records/1
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/records/by-category?category=Rent
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/records/by-date?from=2026-10-09&to=2026-10-09
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/records/top-expenses?count=1
+Accept: application/json
+
+###
