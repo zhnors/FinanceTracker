@@ -1,10 +1,13 @@
 using FinanceTracker;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddSingleton<IFinanceService, FinanceService>();
 
@@ -12,30 +15,6 @@ builder.Services.AddSingleton<IFinanceService, FinanceService>();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-
-
-var service = app.Services.GetRequiredService<IFinanceService>();
-
-service.AddRecord(new IncomeRecord {
-    Id = 1,
-    Title = "Salary",
-    Amount = 30000,
-    Date = DateTime.Now,
-    Category = "Salary",
-    Description = "Monthly salary",
-    IncomeType = FinanceTracker.Enums.IncomeTypes.Salary
-});
-
-service.AddRecord(new ExpenseRecord
-{
-    Id = 3,
-    Title = "Rent",
-    Amount = 12000,
-    Date = DateTime.Now,
-    Category = "Rent",
-    Description = "Monthly apartment rent",
-    ExpenseType = FinanceTracker.Enums.ExpenseTypes.Rent
-});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
