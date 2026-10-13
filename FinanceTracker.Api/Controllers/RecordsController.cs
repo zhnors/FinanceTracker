@@ -67,4 +67,43 @@ public class RecordsController : ControllerBase
     }
 
 
+    [HttpDelete("{id}")]
+    public IActionResult DeleteRecord(int id) 
+    {
+        var result = _financeService.DeleteRecord(id);
+        if (result) return NoContent();
+        else return NotFound();
+    }
+
+    [HttpPost("income")]
+    public ActionResult<IncomeRecord> AddIncome(IncomeRecord record)
+    {
+        try
+        {
+            if (_financeService.GetRecordById(record.Id) != null) return Conflict();
+            _financeService.AddRecord(record);
+            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost("expense")]
+    public ActionResult<ExpenseRecord> AddExpense(ExpenseRecord record)
+    {
+        try
+        {
+            if (_financeService.GetRecordById(record.Id) != null) return Conflict();
+            _financeService.AddRecord(record);
+            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
 }

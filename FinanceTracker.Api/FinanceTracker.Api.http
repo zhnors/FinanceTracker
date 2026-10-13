@@ -30,3 +30,73 @@ GET {{FinanceTracker.Api_HostAddress}}/records/top-expenses?count=1
 Accept: application/json
 
 ###
+
+DELETE {{FinanceTracker.Api_HostAddress}}/records/4
+Accept: application/json
+
+###
+
+DELETE {{FinanceTracker.Api_HostAddress}}/records/10
+Accept: application/json
+
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/records/income
+Content-Type: application/json
+
+{
+  "id": 4,
+  "title": "Bonus",
+  "amount": 5000,
+  "date": "2026-10-01",
+  "category": "Bonus",
+  "description": "Quarterly bonus",
+  "incomeType": "Bonus"
+}
+
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/records/expense
+Content-Type: application/json
+
+{
+  "id": 3,
+  "title": "Rent",
+  "amount": 12000,
+  "date": "2026-10-04",
+  "category": "Rent",
+  "description": "Monthly apartment rent",
+  "expenseType": "Rent"
+}
+
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/records/income
+Content-Type: application/json
+
+{
+  "id": 3,
+  "title": "Bonus",
+  "amount": 5000,
+  "date": "2026-10-01",
+  "category": "Bonus",
+  "description": "Quarterly bonus",
+  "incomeType": "Bonus"
+}
+
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/records/expense
+Content-Type: application/json
+
+{
+  "id": 6,
+  "title": "Rent",
+  "amount": -12000,
+  "date": "2026-10-04",
+  "category": "Rent",
+  "description": "Monthly apartment rent",
+  "expenseType": "Rent"
+}
+
+###
