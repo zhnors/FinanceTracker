@@ -430,6 +430,47 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
+        public void UpdateRecord_ExistingRecord_ReplacesRecord()
+        {           
+            var income = CreateIncome(id: 16, amount: 16000);
+
+            var newincome = CreateIncome(id: 16, amount: 26000);
+
+            service.AddRecord(income);
+
+            var result = service.UpdateRecord(newincome);
+
+            Assert.True(result);
+            Assert.Equal(26000, service.GetRecordById(16)!.Amount);
+        }
+
+        [Fact]
+        public void UpdateRecord_NonExistentRecord_ReturnsFalse()
+        {
+            var newincome = CreateIncome(id: 16, amount: 26000);
+
+            service.AddRecord(CreateIncome(id: 15, amount: 16000));
+
+            var result = service.UpdateRecord(newincome);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void UpdateRecord_InvalidAmount_ThrowsArgumentOutOfRangeException()
+        {
+            var income = CreateIncome(id: 16, amount: 16000);
+
+            var newincome = CreateIncome(id: 16, amount: -26000);
+
+            service.AddRecord(income);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => service.UpdateRecord(newincome));
+
+            Assert.Equal(16000, service.GetRecordById(16)!.Amount);
+        }
+
+        [Fact]
         public void DeleteAllRecords_ClearsRecords()
         {
             var income = CreateIncome(id: 1, amount: 38000);

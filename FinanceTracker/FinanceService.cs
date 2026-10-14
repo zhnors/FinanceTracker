@@ -136,6 +136,19 @@ namespace FinanceTracker
                 .ToList();   
         }
 
+        public bool UpdateRecord(FinancialRecord record)
+        {
+            var index = RecordList.FindIndex(r => r.Id == record.Id);
+
+            if (index == -1) return false;
+
+            ValidateRecord(record);
+
+            RecordList[index] = record;
+
+            return true;
+        }
+
         public void DeleteAllRecords()
         {
             RecordList.Clear();
