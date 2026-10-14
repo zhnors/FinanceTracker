@@ -49,7 +49,5 @@ namespace FinanceTracker.Api.Dtos
                     "Date can’t be in the future",
                     new[] {nameof(Date)});
         }
-
-
     }
 }

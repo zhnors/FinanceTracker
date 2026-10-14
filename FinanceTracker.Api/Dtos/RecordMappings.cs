@@ -43,7 +43,6 @@ namespace FinanceTracker.Api.Dtos
 
         }
 
-
         public static FinancialRecord ToRecord(this CreateRecordRequest request)
         {
             if (request.RecordType == RecordTypes.Income)
@@ -76,5 +75,39 @@ namespace FinanceTracker.Api.Dtos
             }
             else throw new ArgumentException($"Unknown record type: {request.RecordType}");
         }
+
+        public static FinancialRecord ToRecord(this UpdateRecordRequest request, FinancialRecord existing)
+        {
+            if (existing is IncomeRecord incomeRecord)
+            {
+                IncomeRecord updatedIncome = new IncomeRecord
+                {
+                    Id = incomeRecord.Id,
+                    Title = request.Title,
+                    Amount = request.Amount,
+                    Date = request.Date.Value,
+                    Category = request.Category,
+                    Description = request.Description,            
+                    IncomeType = incomeRecord.IncomeType
+                };
+                return updatedIncome;
+            }
+            else if (existing is ExpenseRecord expenseRecord)
+            {
+                ExpenseRecord updatedExpense = new ExpenseRecord
+                {
+                    Id = expenseRecord.Id,
+                    Title = request.Title,
+                    Amount = request.Amount,
+                    Date = request.Date.Value,
+                    Category = request.Category,
+                    Description = request.Description,                 
+                    ExpenseType = expenseRecord.ExpenseType
+                };
+                return updatedExpense;
+            }
+            else throw new ArgumentException($"Unknown record type: {existing.GetType().Name}");
+        }
+
     }
 }

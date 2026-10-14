@@ -134,4 +134,64 @@ Content-Type: application/json
   "recordType": "Income"
 }
 
+### PUT
+
+POST {{FinanceTracker.Api_HostAddress}}/records
+Content-Type: application/json
+
+{
+  "id": 20,
+  "title": "Groceries",
+  "amount": 1500,
+  "date": "2026-10-05",
+  "category": "Food",
+  "description": "Weekly groceries",
+  "recordType": "Expense",
+  "expenseType": "Food"
+}
+
+###
+
+PUT {{FinanceTracker.Api_HostAddress}}/records/20
+Content-Type: application/json
+
+{
+  "title": "Groceries and delivery",
+  "amount": 2100,
+  "date": "2026-10-06",
+  "category": "Food",
+  "description": "Weekly groceries with delivery"
+}
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/records/20
+Accept: application/json
+
+###
+
+PUT {{FinanceTracker.Api_HostAddress}}/records/999
+Content-Type: application/json
+
+{
+  "title": "Does not exist",
+  "amount": 100,
+  "date": "2026-10-06",
+  "category": "Food",
+  "description": "Should return 404"
+}
+
+###
+
+PUT {{FinanceTracker.Api_HostAddress}}/records/20
+Content-Type: application/json
+
+{
+  "title": "",
+  "amount": -500,
+  "date": "2027-01-01",
+  "category": "Food",
+  "description": "Should return 400"
+}
+
 ###

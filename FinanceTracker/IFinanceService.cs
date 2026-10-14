@@ -30,6 +30,8 @@ namespace FinanceTracker
 
         IReadOnlyList<ExpenseRecord> GetTopExpenses(int count = 3);
 
+        bool UpdateRecord(FinancialRecord record);
+
         void DeleteAllRecords();
 
         Task SaveToJsonFileAsync(string path);

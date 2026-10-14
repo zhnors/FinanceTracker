@@ -100,4 +100,23 @@ public class RecordsController : ControllerBase
         }
     }
 
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, UpdateRecordRequest request)
+    {
+        var existing = _financeService.GetRecordById(id);
+        if (existing is null) return NotFound();
+
+        try
+        {
+            var updated = request.ToRecord(existing);
+            _financeService.UpdateRecord(updated);
+            return NoContent();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+
 }
