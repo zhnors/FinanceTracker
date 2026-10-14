@@ -1,5 +1,4 @@
-﻿
-using FinanceTracker.Enums;
+﻿using FinanceTracker.Enums;
 
 namespace FinanceTracker.Api.Dtos
 
@@ -42,6 +41,40 @@ namespace FinanceTracker.Api.Dtos
             }
             else throw new ArgumentException($"Unknown record type: {record.GetType().Name}");
 
+        }
+
+
+        public static FinancialRecord ToRecord(this CreateRecordRequest request)
+        {
+            if (request.RecordType == RecordTypes.Income)
+            {
+                IncomeRecord incomeRecord = new IncomeRecord
+                {
+                    Id = request.Id,
+                    Title = request.Title,
+                    Amount = request.Amount,
+                    Date = request.Date.Value,
+                    Category = request.Category,
+                    Description = request.Description,
+                    IncomeType = request.IncomeType.Value
+                };
+                return incomeRecord;
+            }
+            else if (request.RecordType == RecordTypes.Expense)
+            {
+                ExpenseRecord expenseRecord = new ExpenseRecord
+                {
+                    Id = request.Id,
+                    Title = request.Title,
+                    Amount = request.Amount,
+                    Date = request.Date.Value,
+                    Category = request.Category,
+                    Description = request.Description,
+                    ExpenseType = request.ExpenseType.Value
+                };
+                return expenseRecord;
+            }
+            else throw new ArgumentException($"Unknown record type: {request.RecordType}");
         }
     }
 }

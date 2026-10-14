@@ -84,11 +84,12 @@ public class RecordsController : ControllerBase
         else return NotFound();
     }
 
-    [HttpPost("income")]
-    public ActionResult<RecordResponse> AddIncome(IncomeRecord record)
+    [HttpPost]
+    public ActionResult<RecordResponse> Create(CreateRecordRequest request)
     {
         try
         {
+            var record = request.ToRecord();
             if (_financeService.GetRecordById(record.Id) != null) return Conflict();
             _financeService.AddRecord(record);
             return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
@@ -98,21 +99,5 @@ public class RecordsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
-    [HttpPost("expense")]
-    public ActionResult<RecordResponse> AddExpense(ExpenseRecord record)
-    {
-        try
-        {
-            if (_financeService.GetRecordById(record.Id) != null) return Conflict();
-            _financeService.AddRecord(record);
-            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
 
 }

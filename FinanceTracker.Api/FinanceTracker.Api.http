@@ -11,7 +11,7 @@ Accept: application/json
 
 ###
 
-GET {{FinanceTracker.Api_HostAddress}}/records/1
+GET {{FinanceTracker.Api_HostAddress}}/records/3
 Accept: application/json
 
 ###
@@ -41,7 +41,7 @@ Accept: application/json
 
 ###
 
-POST {{FinanceTracker.Api_HostAddress}}/records/income
+POST {{FinanceTracker.Api_HostAddress}}/records
 Content-Type: application/json
 
 {
@@ -51,12 +51,13 @@ Content-Type: application/json
   "date": "2026-10-01",
   "category": "Bonus",
   "description": "Quarterly bonus",
+  "recordType": "Income",
   "incomeType": "Bonus"
 }
 
 ###
 
-POST {{FinanceTracker.Api_HostAddress}}/records/expense
+POST {{FinanceTracker.Api_HostAddress}}/records
 Content-Type: application/json
 
 {
@@ -66,37 +67,71 @@ Content-Type: application/json
   "date": "2026-10-04",
   "category": "Rent",
   "description": "Monthly apartment rent",
+  "recordType": "Expense",
   "expenseType": "Rent"
 }
 
-###
+### Validation errors
 
-POST {{FinanceTracker.Api_HostAddress}}/records/income
+POST {{FinanceTracker.Api_HostAddress}}/records
 Content-Type: application/json
 
 {
-  "id": 3,
-  "title": "Bonus",
+  "id": 8,
+  "title": "" ,
   "amount": 5000,
   "date": "2026-10-01",
   "category": "Bonus",
   "description": "Quarterly bonus",
+  "recordType": "Income",
+  "incomeType": "Bonus"
+}
+
+###
+POST {{FinanceTracker.Api_HostAddress}}/records
+Content-Type: application/json
+
+{
+  "id": 8,
+  "title": "Bonus" ,
+  "amount": -5000,
+  "date": "2026-10-01",
+  "category": "Bonus",
+  "description": "Quarterly bonus",
+  "recordType": "Income",
   "incomeType": "Bonus"
 }
 
 ###
 
-POST {{FinanceTracker.Api_HostAddress}}/records/expense
+
+POST {{FinanceTracker.Api_HostAddress}}/records
 Content-Type: application/json
 
 {
-  "id": 6,
+  "id": 10,
   "title": "Rent",
-  "amount": -12000,
-  "date": "2026-10-04",
+  "amount": 12000,
+  "date": "2026-10-20",
   "category": "Rent",
   "description": "Monthly apartment rent",
+  "recordType": "Expense",
   "expenseType": "Rent"
+}
+
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/records
+Content-Type: application/json
+
+{
+  "id": 4,
+  "title": "Bonus",
+  "amount": 5000,
+  "date": "2026-10-01",
+  "category": "Bonus",
+  "description": "Quarterly bonus",
+  "recordType": "Income"
 }
 
 ###
