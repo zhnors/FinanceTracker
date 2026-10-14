@@ -1,4 +1,5 @@
 ﻿using FinanceTracker;
+using FinanceTracker.Api.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinanceTracker.Api.Controllers;
@@ -15,9 +16,11 @@ public class RecordsController : ControllerBase
     }
 
     [HttpGet]
-    public IReadOnlyList<FinancialRecord> GetAll()
+    public IReadOnlyList<RecordResponse> GetAll()
     {
-        return _financeService.GetAllRecords();
+        IReadOnlyList<FinancialRecord> result = _financeService.GetAllRecords();
+
+        return result.Select(r => r.ToResponse()).ToList();
     }
 
 
@@ -32,27 +35,31 @@ public class RecordsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public ActionResult<FinancialRecord> GetById(int id)  
+    public ActionResult<RecordResponse> GetById(int id)  
     {
         var result = _financeService.GetRecordById(id);
 
         if (result is null) return NotFound();
 
-        else return Ok(result);
+        else return Ok(result.ToResponse());
     }
 
     [HttpGet("by-category")]
-    public ActionResult<IReadOnlyList<FinancialRecord>> SearchByCat(string category)
+    public ActionResult<IReadOnlyList<RecordResponse>> SearchByCat(string category)
     {
-        return Ok(_financeService.SearchByCategory(category));
+        IReadOnlyList<FinancialRecord> result = _financeService.SearchByCategory(category);
+
+        return Ok(result.Select(r => r.ToResponse()).ToList());
     }
 
     [HttpGet("by-date")]
-    public ActionResult<IReadOnlyList<FinancialRecord>> SearchByDate(DateTime from, DateTime to)
+    public ActionResult<IReadOnlyList<RecordResponse>> SearchByDate(DateTime from, DateTime to)
     {
         try
         {
-            return Ok(_financeService.SearchByDate(from, to));
+            IReadOnlyList<FinancialRecord> result = _financeService.SearchByDate(from, to);
+
+            return Ok(result.Select(r => r.ToResponse()).ToList());
         }
         catch (ArgumentException ex)
         {
@@ -61,9 +68,11 @@ public class RecordsController : ControllerBase
     }
 
     [HttpGet("top-expenses")]
-    public ActionResult<IReadOnlyList<FinancialRecord>> TopExpenses(int count = 3)
+    public ActionResult<IReadOnlyList<RecordResponse>> TopExpenses(int count = 3)
     {
-        return Ok(_financeService.GetTopExpenses(count));
+        IReadOnlyList<FinancialRecord> result = _financeService.GetTopExpenses(count);
+
+        return Ok(result.Select(r => r.ToResponse()).ToList());
     }
 
 
@@ -76,13 +85,13 @@ public class RecordsController : ControllerBase
     }
 
     [HttpPost("income")]
-    public ActionResult<IncomeRecord> AddIncome(IncomeRecord record)
+    public ActionResult<RecordResponse> AddIncome(IncomeRecord record)
     {
         try
         {
             if (_financeService.GetRecordById(record.Id) != null) return Conflict();
             _financeService.AddRecord(record);
-            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record);
+            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
         }
         catch (ArgumentException ex)
         {
@@ -91,13 +100,13 @@ public class RecordsController : ControllerBase
     }
 
     [HttpPost("expense")]
-    public ActionResult<ExpenseRecord> AddExpense(ExpenseRecord record)
+    public ActionResult<RecordResponse> AddExpense(ExpenseRecord record)
     {
         try
         {
             if (_financeService.GetRecordById(record.Id) != null) return Conflict();
             _financeService.AddRecord(record);
-            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record);
+            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
         }
         catch (ArgumentException ex)
         {
