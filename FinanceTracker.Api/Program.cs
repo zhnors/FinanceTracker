@@ -1,4 +1,6 @@
 using FinanceTracker;
+using FinanceTracker.Api.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,9 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 builder.Services.AddSingleton<IFinanceService, FinanceService>();
+
+builder.Services.AddDbContext<FinanceDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("FinanceDb")));
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
