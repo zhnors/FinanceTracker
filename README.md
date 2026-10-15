@@ -2,13 +2,14 @@
 
 Personal finance tracker for managing income, expenses and monthly balance, built with C# and SQL Server.
 
-> 🚧 Work in progress — currently a console application, being rewritten as an ASP.NET Core Web API with Entity Framework Core.
+> 🚧 Work in progress — ASP.NET Core Web API with in-memory storage; moving to SQL Server with Entity Framework Core.
 
 ## Tech stack
 
 - C# / .NET
 - SQL Server (T-SQL)
 - xUnit
+- ASP.NET Core Web API
 
 ## Features
 
@@ -46,7 +47,7 @@ sql/                    Database schema, views, functions, procedures, triggers
 
 ## Roadmap
 
-- [ ] ASP.NET Core Web API
+- [x] ASP.NET Core Web API
 - [ ] Entity Framework Core with migrations
 - [ ] React frontend
 - [ ] Docker and cloud deployment
