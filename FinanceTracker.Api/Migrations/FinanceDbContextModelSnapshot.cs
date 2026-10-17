@@ -31,7 +31,8 @@ namespace FinanceTracker.Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("RecordTypeId")
                         .HasColumnType("int");
@@ -39,6 +40,9 @@ namespace FinanceTracker.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("RecordTypeId");
+
+                    b.HasIndex("Name", "RecordTypeId")
+                        .IsUnique();
 
                     b.ToTable("Categories");
                 });
@@ -53,9 +57,13 @@ namespace FinanceTracker.Api.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("RecordTypes");
                 });
@@ -70,11 +78,13 @@ namespace FinanceTracker.Api.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
