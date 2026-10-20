@@ -46,6 +46,68 @@ namespace FinanceTracker.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Salary",
+                            RecordTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Gift",
+                            RecordTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Freelance",
+                            RecordTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Bonus",
+                            RecordTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Food",
+                            RecordTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Transport",
+                            RecordTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Rent",
+                            RecordTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "Health",
+                            RecordTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "Entertainment",
+                            RecordTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "Education",
+                            RecordTypeId = 2
+                        });
                 });
 
             modelBuilder.Entity("FinanceTracker.Api.Data.Entities.FinancialRecordEntity", b =>
@@ -114,6 +176,18 @@ namespace FinanceTracker.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("RecordTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Income"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Expense"
+                        });
                 });
 
             modelBuilder.Entity("FinanceTracker.Api.Data.Entities.User", b =>
@@ -137,6 +211,14 @@ namespace FinanceTracker.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FirstName = "Demo",
+                            LastName = "User"
+                        });
                 });
 
             modelBuilder.Entity("FinanceTracker.Api.Data.Entities.Category", b =>

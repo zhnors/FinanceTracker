@@ -23,13 +23,19 @@ public class FinanceDbContext : DbContext
             entity.Property(u => u.FirstName).HasMaxLength(50);
 
             entity.Property(u => u.LastName).HasMaxLength(50);
+
+            entity.HasData(new User { Id = 1, FirstName = "Demo", LastName = "User"});
         });
 
         modelBuilder.Entity<RecordType>(entity =>
-        { 
+        {
             entity.Property(rt => rt.Name).HasMaxLength(10);
 
             entity.HasIndex(rt => rt.Name).IsUnique();
+
+            entity.HasData(
+                new RecordType { Id = 1, Name = "Income"},
+                new RecordType { Id = 2, Name = "Expense"});
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -37,6 +43,18 @@ public class FinanceDbContext : DbContext
             entity.Property(c => c.Name).HasMaxLength(100);
 
             entity.HasIndex(c => new { c.Name, c.RecordTypeId }).IsUnique();
+
+            entity.HasData(
+                new Category { Id = 1, Name = "Salary", RecordTypeId = 1},
+                new Category { Id = 2, Name = "Gift", RecordTypeId = 1},
+                new Category { Id = 3, Name = "Freelance", RecordTypeId = 1},
+                new Category { Id = 4, Name = "Bonus", RecordTypeId = 1},
+                new Category { Id = 5, Name = "Food", RecordTypeId = 2},
+                new Category { Id = 6, Name = "Transport", RecordTypeId = 2},
+                new Category { Id = 7, Name = "Rent", RecordTypeId = 2},
+                new Category { Id = 8, Name = "Health", RecordTypeId = 2},
+                new Category { Id = 9, Name = "Entertainment", RecordTypeId = 2},
+                new Category { Id = 10, Name = "Education", RecordTypeId = 2});
         });
 
         modelBuilder.Entity<FinancialRecordEntity>(entity =>
