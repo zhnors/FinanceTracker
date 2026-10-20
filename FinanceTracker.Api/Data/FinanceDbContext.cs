@@ -51,7 +51,8 @@ public class FinanceDbContext : DbContext
 
             entity.HasOne(r => r.Category)
                 .WithMany()
-                .HasForeignKey(r => r.CategoryId)
+                .HasForeignKey(r => new {r.CategoryId, r.RecordTypeId})
+                .HasPrincipalKey(c => new { c.Id, c.RecordTypeId})
                 .OnDelete(DeleteBehavior.Restrict);
 
             entity.HasOne(r => r.User)

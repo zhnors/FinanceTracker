@@ -83,11 +83,11 @@ namespace FinanceTracker.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("RecordTypeId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("CategoryId", "RecordTypeId");
 
                     b.ToTable("FinancialRecords", t =>
                         {
@@ -152,12 +152,6 @@ namespace FinanceTracker.Api.Migrations
 
             modelBuilder.Entity("FinanceTracker.Api.Data.Entities.FinancialRecordEntity", b =>
                 {
-                    b.HasOne("FinanceTracker.Api.Data.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("FinanceTracker.Api.Data.Entities.RecordType", "RecordType")
                         .WithMany()
                         .HasForeignKey("RecordTypeId")
@@ -167,6 +161,13 @@ namespace FinanceTracker.Api.Migrations
                     b.HasOne("FinanceTracker.Api.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FinanceTracker.Api.Data.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId", "RecordTypeId")
+                        .HasPrincipalKey("Id", "RecordTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
