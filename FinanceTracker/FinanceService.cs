@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace FinanceTracker
 {
-    public class FinanceService : IFinanceService
+    public class FinanceService : IFinanceService, IRecordFileStorage
     {
         readonly decimal largeExpenseLimit = 10000;
 
@@ -11,7 +11,7 @@ namespace FinanceTracker
 
         List<FinancialRecord> RecordList = new List<FinancialRecord>();
 
-        public void AddRecord(FinancialRecord record)
+        public Task AddRecordAsync(FinancialRecord record)
         {
             ValidateRecord(record);
 
@@ -21,9 +21,11 @@ namespace FinanceTracker
             {
                 LargeExpense?.Invoke(record);
             }
+
+            return Task.CompletedTask;
         }
 
-        public bool DeleteRecord(int id)
+        public Task<bool> DeleteRecordAsync(int id)
         {
             var isFound = false;
             var recordToDelete = RecordList.FirstOrDefault(record => record.Id == id);
@@ -35,123 +37,102 @@ namespace FinanceTracker
                 RecordList.Remove(recordToDelete);
             }
 
-            return isFound;
+            return Task.FromResult(isFound);
         }
 
-        public IReadOnlyList<FinancialRecord> GetAllRecords()
+        public Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync()
         {
-            return RecordList.ToList();
+            IReadOnlyList<FinancialRecord> result = RecordList.ToList();
+
+            return Task.FromResult(result);
         }
 
-        public IReadOnlyList<FinancialRecord> SearchByCategory(string category)
+        public Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
         {
            if (string.IsNullOrEmpty(category)) throw new ArgumentNullException();
 
-           return RecordList.Where(record => record.Category == category).ToList();       
+            IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Category == category).ToList();
+
+            return Task.FromResult(result);
         }
 
-        public IReadOnlyList<FinancialRecord> SearchByDate(DateTime date)
+        public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
         {
             if (date > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
             if (date == default) throw new ArgumentException("Date is out of range");
 
-            return RecordList.Where(record => record.Date.Date == date.Date).ToList();             
+            IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Date.Date == date.Date).ToList();
+
+            return Task.FromResult(result);
         }
 
-        public IReadOnlyList<FinancialRecord> SearchByDate(DateTime fromDate, DateTime toDate)
+        public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
         {
             if (fromDate > DateTime.Now || toDate > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
             if (fromDate > toDate) throw new ArgumentException("The start date must be earlier than or equal to the end date.");
 
-            return RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date).ToList();          
+            IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date).ToList();
+            
+            return Task.FromResult(result);
         }
 
-        public FinancialRecord? GetRecordById(int id)
+        public Task<FinancialRecord?> GetRecordByIdAsync(int id)
         {
-            return RecordList.FirstOrDefault(record => record.Id == id);
+            FinancialRecord? result = RecordList.FirstOrDefault(record => record.Id == id);
+
+            return Task.FromResult(result);
         }
 
-        public decimal IncomeAmount()
+        public Task<decimal> IncomeAmountAsync()
         {
-            IEnumerable<FinancialRecord> incomeList = RecordList.OfType<IncomeRecord>();
+            var income = RecordList.OfType<IncomeRecord>().Sum(r => r.Amount);              
 
-            if (!incomeList.Any())
-            {
-                return 0;
-            }
-
-            decimal income = 0;
-
-            foreach (var record in incomeList)
-            {
-                income += record.Amount;
-            }
-
-            return income;
+            return Task.FromResult(income);
         }
 
-        public decimal ExpenseAmount()
+        public Task<decimal> ExpenseAmountAsync()
         {
-            IEnumerable<FinancialRecord> expenseList = RecordList.OfType<ExpenseRecord>();
+            var expense = RecordList.OfType<ExpenseRecord>().Sum(r => r.Amount);              
 
-            if (!expenseList.Any())
-            {
-                return 0;
-            }
-
-            decimal total = 0;
-
-            foreach (var record in expenseList)
-            {
-                total += record.Amount;
-            }
-
-            return total;
+            return Task.FromResult(expense);
         }
 
-        public decimal TotalAmount()
+        public Task<decimal> TotalAmountAsync()
         {
-            decimal income = 0;
+            var total = RecordList.Sum(r => r is ExpenseRecord ? -r.Amount : r.Amount);
 
-            foreach (var record in RecordList)
-            {
-                if (record is ExpenseRecord)
-                {
-                    income -= record.Amount;
-                }
-
-                else income += record.Amount;
-            }
-
-            return income;
-
+            return Task.FromResult(total);
         }
 
-        public IReadOnlyList<ExpenseRecord> GetTopExpenses(int count)
+        public Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count)
         {
-                return RecordList
+            IReadOnlyList<ExpenseRecord> result = RecordList
                 .OfType<ExpenseRecord>()
                 .OrderByDescending(r => r.Amount)
                 .Take(count)
-                .ToList();   
+                .ToList();
+
+            return Task.FromResult(result);
         }
 
-        public bool UpdateRecord(FinancialRecord record)
+        public Task<bool> UpdateRecordAsync(FinancialRecord record)
         {
             var index = RecordList.FindIndex(r => r.Id == record.Id);
 
-            if (index == -1) return false;
+            if (index == -1) return Task.FromResult(false);
 
             ValidateRecord(record);
 
             RecordList[index] = record;
 
-            return true;
+            return Task.FromResult(true);
         }
 
-        public void DeleteAllRecords()
+        public Task DeleteAllRecordsAsync()
         {
             RecordList.Clear();
+
+            return Task.CompletedTask;
         }
 
         public async Task SaveToJsonFileAsync(string path)

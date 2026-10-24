@@ -42,37 +42,37 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
-        public void AddRecord_ValidIncome_AddsIncome()
+        public async Task AddRecord_ValidIncome_AddsIncome()
         {
             //Arrange
             IncomeRecord income = CreateIncome();
 
             //Act
-            service.AddRecord(income);
+            await service.AddRecordAsync(income);
 
             //Assert
-            decimal result = service.IncomeAmount();
+            decimal result = await service.IncomeAmountAsync();
 
             Assert.Equal(30000, result);
         }
 
         [Fact]
-        public void AddRecord_ValidExpense_AddsExpense()
+        public async Task AddRecord_ValidExpense_AddsExpense()
         {
             //Arrange
             ExpenseRecord expense = CreateExpense();
 
             //Act
-            service.AddRecord(expense);
+            await service.AddRecordAsync(expense);
 
             //Assert
-            decimal result = service.ExpenseAmount();
+            decimal result = await service.ExpenseAmountAsync();
 
             Assert.Equal(12000, result);
         }
 
         [Fact]
-        public void AddRecord_NullRecord_ThrowsArgumentNullException()
+        public async Task AddRecord_NullRecord_ThrowsArgumentNullException()
         {
             //Arrange
             FinancialRecord record = null!;
@@ -80,13 +80,13 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentNullException>(()=> service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentNullException>(()=> service.AddRecordAsync(record));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void AddRecord_InvalidTitle_ThrowsArgumentException(string title)
+        public async Task AddRecord_InvalidTitle_ThrowsArgumentException(string title)
         {
             //Arrange
             var record = CreateIncome(title: title);
@@ -94,13 +94,13 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentException>(() => service.AddRecordAsync(record));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void AddRecord_InvalidCategory_ThrowsArgumentException(string category)
+        public async Task AddRecord_InvalidCategory_ThrowsArgumentException(string category)
         {
             //Arrange
             FinancialRecord record = CreateIncome();
@@ -110,13 +110,13 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentException>(() => service.AddRecordAsync(record));
         }
 
         [Theory]
         [InlineData("")]
         [InlineData(" ")]
-        public void AddRecord_InvalidDescription_ThrowsArgumentException(string description)
+        public async Task AddRecord_InvalidDescription_ThrowsArgumentException(string description)
         {
             //Arrange
             var record = CreateExpense();
@@ -126,13 +126,13 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentException>(() => service.AddRecordAsync(record));
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(-100)]
-        public void AddRecord_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
+        public async Task AddRecord_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
         {
             //Arrange
             var record = CreateExpense(amount : amount);
@@ -140,13 +140,13 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.AddRecordAsync(record));
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(-25)]
-        public void AddRecord_InvalidId_ThrowsArgumentOutOfRangeException(int id)
+        public async Task AddRecord_InvalidId_ThrowsArgumentOutOfRangeException(int id)
         {
             //Arrange
             var record = CreateExpense(id: id);
@@ -154,11 +154,11 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.AddRecordAsync(record));
         }
 
         [Fact]
-        public void AddRecord_DefaultDate_ThrowsArgumentOutOfRangeException()
+        public async Task AddRecord_DefaultDate_ThrowsArgumentOutOfRangeException()
         {
             //Arrange
             var record = CreateExpense();
@@ -168,11 +168,11 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.AddRecordAsync(record));
         }
 
         [Fact]
-        public void AddRecord_FutureDate_ThrowsArgumentOutOfRangeException()
+        public async Task AddRecord_FutureDate_ThrowsArgumentOutOfRangeException()
         {
             //Arrange
             var record = CreateExpense();
@@ -182,11 +182,11 @@ namespace FinanceTracker.Tests
             //Act
             //Assert
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => service.AddRecord(record));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.AddRecordAsync(record));
         }
 
         [Fact]
-        public void AddRecord_BigExpense_RaisesLargeExpenseEvent()
+        public async Task AddRecord_BigExpense_RaisesLargeExpenseEvent()
         {
             bool isRaised = false;
 
@@ -195,74 +195,74 @@ namespace FinanceTracker.Tests
                 isRaised = true;
             };
 
-            service.AddRecord(CreateExpense(amount:15000));
+            await service.AddRecordAsync(CreateExpense(amount:15000));
 
             Assert.True(isRaised);
         }
 
         [Fact]
-        public void DeleteRecord_ExistingRecord_ReturnsTrue()
+        public async Task DeleteRecord_ExistingRecord_ReturnsTrue()
         {
             var record = CreateExpense(id : 1);
 
-            service.AddRecord(record);
+            await service.AddRecordAsync(record);
 
 
-            Assert.True(service.DeleteRecord(1));
+            Assert.True(await service.DeleteRecordAsync(1));
         }
 
         [Fact]
-        public void DeleteRecord_NotExistingRecord_ReturnsFalse()
+        public async Task DeleteRecord_NotExistingRecord_ReturnsFalse()
         {
             var record = CreateExpense(id: 1);
 
-            service.AddRecord(record);
+            await service.AddRecordAsync(record);
 
 
-            Assert.False(service.DeleteRecord(99));
+            Assert.False(await service.DeleteRecordAsync(99));
         }
 
         [Fact]
-        public void GetAllRecords_ReturnsAllAddedRecords()
+        public async Task GetAllRecords_ReturnsAllAddedRecords()
         {
-            service.AddRecord(CreateExpense());
+            await service.AddRecordAsync(CreateExpense());
 
-            service.AddRecord(CreateIncome());
+            await service.AddRecordAsync(CreateIncome());
 
 
-            var result = service.GetAllRecords();
+            var result = await service.GetAllRecordsAsync();
 
 
             Assert.Equal(2, result.Count);
         }
 
         [Fact]
-        public void GetAllRecords_ReturnsCopy()
+        public async Task GetAllRecords_ReturnsCopy()
         {
-            service.AddRecord(CreateIncome());
+            await service.AddRecordAsync(CreateIncome());
 
-            service.AddRecord(CreateExpense());
+            await service.AddRecordAsync(CreateExpense());
 
 
-            var result = service.GetAllRecords();
+            var result = await service.GetAllRecordsAsync();
 
-            service.DeleteAllRecords();
+            await service.DeleteAllRecordsAsync();
 
 
             Assert.Equal(2, result.Count);
         }
 
         [Fact]
-        public void SearchByCategory_ReturnsOnlyMatchingRecords() 
+        public async Task SearchByCategory_ReturnsOnlyMatchingRecords() 
         {
-            service.AddRecord(CreateExpense(id: 1, category: "Food"));
+            await service.AddRecordAsync(CreateExpense(id: 1, category: "Food"));
 
-            service.AddRecord(CreateIncome(id: 2, category: "Bonus"));
+            await service.AddRecordAsync(CreateIncome(id: 2, category: "Bonus"));
 
-            service.AddRecord(CreateIncome(id: 3, category: "Bonus"));  
+            await service.AddRecordAsync(CreateIncome(id: 3, category: "Bonus"));  
             
 
-            var result = service.SearchByCategory("Bonus");
+            var result = await service.SearchByCategoryAsync("Bonus");
 
 
             Assert.Equal(2, result.Count);
@@ -271,21 +271,21 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
-        public void SearchByCategory_NoMatches_ReturnsEmptyList()
+        public async Task SearchByCategory_NoMatches_ReturnsEmptyList()
         {
-            service.AddRecord(CreateExpense(category: "Food"));
+            await service.AddRecordAsync(CreateExpense(category: "Food"));
 
-            service.AddRecord(CreateIncome(category: "Bonus"));
+            await service.AddRecordAsync(CreateIncome(category: "Bonus"));
 
 
-            var result = service.SearchByCategory("Rent");
+            var result = await service.SearchByCategoryAsync("Rent");
 
 
             Assert.Empty(result);
         }
 
         [Fact]
-        public void SearchByDate_Range_ReturnsRecordsWithinRange()
+        public async Task SearchByDate_Range_ReturnsRecordsWithinRange()
         {
             DateTime fromDate = new DateTime(2026, 10, 1);
 
@@ -307,16 +307,16 @@ namespace FinanceTracker.Tests
 
             secondIncome.Date = toDate;
 
-            service.AddRecord(firstExpense);
+            await service.AddRecordAsync(firstExpense);
 
-            service.AddRecord(secondExpense);
+            await service.AddRecordAsync(secondExpense);
 
-            service.AddRecord(firstIncome);
+            await service.AddRecordAsync(firstIncome);
 
-            service.AddRecord(secondIncome);
+            await service.AddRecordAsync(secondIncome);
 
 
-            var result =  service.SearchByDate(fromDate, toDate);
+            var result = await service.SearchByDateAsync(fromDate, toDate);
 
 
             Assert.Equal(2, result.Count);
@@ -327,23 +327,23 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
-        public void GetRecordById_RecordNotFound_ReturnsNull()
+        public async Task GetRecordById_RecordNotFound_ReturnsNull()
         {
-            service.AddRecord(CreateExpense(id: 1));
+            await service.AddRecordAsync(CreateExpense(id: 1));
 
-            service.AddRecord(CreateExpense(id: 2));
+            await service.AddRecordAsync(CreateExpense(id: 2));
 
-            Assert.Null(service.GetRecordById(3));
+            Assert.Null(await service.GetRecordByIdAsync(3));
         }
 
         [Fact]
-        public void GetRecordById_RecordFound_ReturnsRecord()
+        public async Task GetRecordById_RecordFound_ReturnsRecord()
         {
-            service.AddRecord(CreateExpense(id: 2));
+            await service.AddRecordAsync(CreateExpense(id: 2));
 
-            service.AddRecord(CreateExpense(id: 3));
+            await service.AddRecordAsync(CreateExpense(id: 3));
 
-            var result = service.GetRecordById(2);
+            var result = await service.GetRecordByIdAsync(2);
 
             Assert.NotNull(result);
 
@@ -351,18 +351,18 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
-        public void GetTopExpenses_ReturnsHighestFirst()
+        public async Task GetTopExpenses_ReturnsHighestFirst()
         {
-            service.AddRecord(CreateExpense(id: 1, amount: 3000));
+            await service.AddRecordAsync(CreateExpense(id: 1, amount: 3000));
 
-            service.AddRecord(CreateExpense(id: 2, amount: 6000));
+            await service.AddRecordAsync(CreateExpense(id: 2, amount: 6000));
 
-            service.AddRecord(CreateExpense(id: 3, amount: 8000));
+            await service.AddRecordAsync(CreateExpense(id: 3, amount: 8000));
 
-            service.AddRecord(CreateExpense(id: 4, amount: 10000));
+            await service.AddRecordAsync(CreateExpense(id: 4, amount: 10000));
 
 
-            var result = service.GetTopExpenses(2);
+            var result = await service.GetTopExpensesAsync(2);
 
             Assert.Equal(2, result.Count);
 
@@ -372,20 +372,20 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
-        public void IncomeAmount_ReturnsCorrectSum()
+        public async Task IncomeAmount_ReturnsCorrectSum()
         {
             var firstIncome = CreateIncome(id: 1,amount: 30000);
 
             var secondIncome = CreateIncome(id: 2, amount: 6000);
 
-            service.AddRecord(firstIncome);
+            await service.AddRecordAsync(firstIncome);
 
-            service.AddRecord(secondIncome);
+            await service.AddRecordAsync(secondIncome);
 
             decimal expected = 36000;
 
 
-            var result = service.IncomeAmount();
+            var result = await service.IncomeAmountAsync();
 
 
             Assert.Equal(expected, result);
@@ -393,119 +393,121 @@ namespace FinanceTracker.Tests
         }
 
         [Fact]
-        public void ExpenseAmount_ReturnsCorrectSum()
+        public async Task ExpenseAmount_ReturnsCorrectSum()
         {
             var firstExpense = CreateExpense(id: 1, amount: 12000);
 
             var secondExpense = CreateExpense(id: 2, amount: 2500);
 
-            service.AddRecord(firstExpense);
+            await service.AddRecordAsync(firstExpense);
 
-            service.AddRecord(secondExpense);
+            await service.AddRecordAsync(secondExpense);
 
             decimal expected = 14500;
 
-            var result = service.ExpenseAmount();
+            var result = await service.ExpenseAmountAsync();
 
             Assert.Equal(expected, result);
 
         }
 
         [Fact]
-        public void TotalAmount_ReturnsIncomeMinusExpenses()
+        public async Task TotalAmount_ReturnsIncomeMinusExpenses()
         {
             var income = CreateIncome(id: 1, amount: 38000);
 
             var expense = CreateExpense(id: 2, amount: 14500);
 
-            service.AddRecord(income);
+            await service.AddRecordAsync(income);
 
-            service.AddRecord(expense);
+            await service.AddRecordAsync(expense);
 
             decimal expected = 23500;
 
-            var result = service.TotalAmount();
+            var result = await service.TotalAmountAsync();
 
             Assert.Equal(expected, result);
         }
 
         [Fact]
-        public void UpdateRecord_ExistingRecord_ReplacesRecord()
+        public async Task UpdateRecord_ExistingRecord_ReplacesRecord()
         {           
             var income = CreateIncome(id: 16, amount: 16000);
 
             var newincome = CreateIncome(id: 16, amount: 26000);
 
-            service.AddRecord(income);
+            await service.AddRecordAsync(income);
 
-            var result = service.UpdateRecord(newincome);
+            var result = await service.UpdateRecordAsync(newincome);
+
+            var updated = await service.GetRecordByIdAsync(16);
 
             Assert.True(result);
-            Assert.Equal(26000, service.GetRecordById(16)!.Amount);
+            Assert.Equal(26000, updated!.Amount);
         }
 
         [Fact]
-        public void UpdateRecord_NonExistentRecord_ReturnsFalse()
+        public async Task UpdateRecord_NonExistentRecord_ReturnsFalse()
         {
             var newincome = CreateIncome(id: 16, amount: 26000);
 
-            service.AddRecord(CreateIncome(id: 15, amount: 16000));
+            await service.AddRecordAsync(CreateIncome(id: 15, amount: 16000));
 
-            var result = service.UpdateRecord(newincome);
+            var result = await service.UpdateRecordAsync(newincome);
 
             Assert.False(result);
         }
 
         [Fact]
-        public void UpdateRecord_InvalidAmount_ThrowsArgumentOutOfRangeException()
+        public async Task UpdateRecord_InvalidAmount_ThrowsArgumentOutOfRangeException()
         {
             var income = CreateIncome(id: 16, amount: 16000);
 
             var newincome = CreateIncome(id: 16, amount: -26000);
 
-            service.AddRecord(income);
+            await service.AddRecordAsync(income);
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => service.UpdateRecord(newincome));
+            await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.UpdateRecordAsync(newincome));
 
-            Assert.Equal(16000, service.GetRecordById(16)!.Amount);
+            Assert.Equal(16000, (await service.GetRecordByIdAsync(16))!.Amount);
         }
 
         [Fact]
-        public void DeleteAllRecords_ClearsRecords()
+        public async Task DeleteAllRecords_ClearsRecords()
         {
             var income = CreateIncome(id: 1, amount: 38000);
 
             var expense = CreateExpense(id: 2, amount: 14500);
 
-            service.AddRecord(income);
+            await service.AddRecordAsync(income);
 
-            service.AddRecord(expense);
+            await service.AddRecordAsync(expense);
 
-            service.DeleteAllRecords();
+            await service.DeleteAllRecordsAsync();
 
-            Assert.Equal(0, service.IncomeAmount());
+            Assert.Equal(0, await service.IncomeAmountAsync());
 
-            Assert.Equal(0, service.ExpenseAmount());
+            Assert.Equal(0, await service.ExpenseAmountAsync());
 
-            Assert.Equal(0, service.TotalAmount());
+            Assert.Equal(0, await service.TotalAmountAsync());
         }
 
         [Fact]
         public async Task SaveToJsonFileAsync_EmptyPath_ThrowsArgumentException() 
         {
-            service.AddRecord(CreateIncome());
+            await service.AddRecordAsync(CreateIncome());
 
-            service.AddRecord(CreateExpense());
+            await service.AddRecordAsync(CreateExpense());
 
-            await Assert.ThrowsAsync<ArgumentException>(() =>  service.SaveToJsonFileAsync("") );
+            await Assert.ThrowsAsync<ArgumentException>(() => service.SaveToJsonFileAsync("") );
         }
 
         [Fact]
         public async Task SaveToJsonFileAsync_CreatesNotEmptyFile() 
         {
-            service.AddRecord(CreateIncome());
+            await service.AddRecordAsync(CreateIncome());
 
-            service.AddRecord(CreateExpense());
+            await service.AddRecordAsync(CreateExpense());
 
             string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.json");
 
@@ -515,7 +517,7 @@ namespace FinanceTracker.Tests
 
                 Assert.True(File.Exists(path));
 
-                string json = await File.ReadAllTextAsync(path);
+                string json = await File.ReadAllTextAsync(path, TestContext.Current.CancellationToken);
 
                 Assert.False(string.IsNullOrWhiteSpace(json));
             }
@@ -543,7 +545,7 @@ namespace FinanceTracker.Tests
 
             try
             {
-                await File.WriteAllTextAsync(path,"");
+                await File.WriteAllTextAsync(path, "", TestContext.Current.CancellationToken);
 
                 await Assert.ThrowsAsync<InvalidDataException>(() => service.LoadFromJsonFileAsync(path));
             }
@@ -561,23 +563,23 @@ namespace FinanceTracker.Tests
         {
             string path = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.json");
 
-            service.AddRecord(CreateIncome(id: 1, amount: 3000));
+            await service.AddRecordAsync(CreateIncome(id: 1, amount: 3000));
 
-            service.AddRecord(CreateExpense(id:2, amount: 1000));
+            await service.AddRecordAsync(CreateExpense(id:2, amount: 1000));
 
             try
             {
                 await service.SaveToJsonFileAsync(path);
 
-                service.DeleteAllRecords();
+                await service.DeleteAllRecordsAsync();
 
                 await service.LoadFromJsonFileAsync(path);
 
-                Assert.Equal(3000, service.IncomeAmount());
+                Assert.Equal(3000, await service.IncomeAmountAsync());
 
-                Assert.Equal(1000, service.ExpenseAmount());
+                Assert.Equal(1000, await service.ExpenseAmountAsync());
 
-                Assert.Equal(2000, service.TotalAmount());
+                Assert.Equal(2000, await service.TotalAmountAsync());
 
             }
             finally

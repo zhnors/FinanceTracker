@@ -8,35 +8,31 @@ namespace FinanceTracker
     {
         event LargeExpenseDelegate? LargeExpense;
 
-        void AddRecord(FinancialRecord record);
+        Task AddRecordAsync(FinancialRecord record);
 
-        bool DeleteRecord(int id);
+        Task<bool> DeleteRecordAsync(int id);
 
-        IReadOnlyList<FinancialRecord> GetAllRecords();
+        Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync();
 
-        IReadOnlyList<FinancialRecord> SearchByCategory(string category);
+        Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category);
 
-        IReadOnlyList<FinancialRecord> SearchByDate(DateTime date);
+        Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date);
 
-        IReadOnlyList<FinancialRecord> SearchByDate(DateTime fromDate, DateTime toDate);
+        Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate);
 
-        FinancialRecord? GetRecordById(int id);
+        Task<FinancialRecord?> GetRecordByIdAsync(int id);
 
-        decimal IncomeAmount();
+        Task<decimal> IncomeAmountAsync();
 
-        decimal ExpenseAmount();
+        Task<decimal> ExpenseAmountAsync();
 
-        decimal TotalAmount();
+        Task<decimal> TotalAmountAsync();
 
-        IReadOnlyList<ExpenseRecord> GetTopExpenses(int count = 3);
+        Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count = 3);
 
-        bool UpdateRecord(FinancialRecord record);
+        Task<bool> UpdateRecordAsync(FinancialRecord record);
 
-        void DeleteAllRecords();
-
-        Task SaveToJsonFileAsync(string path);
-
-        Task LoadFromJsonFileAsync(string path);
+        Task DeleteAllRecordsAsync();
 
     }
 }
