@@ -194,4 +194,29 @@ Content-Type: application/json
   "description": "Should return 400"
 }
 
+### Categories
+
+GET {{FinanceTracker.Api_HostAddress}}/categories
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/categories?recordType=Income
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/categories?recordType=Expense
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/categories/7
+Accept: application/json
+
+###
+
+GET {{FinanceTracker.Api_HostAddress}}/categories/999
+Accept: application/json
+
 ###
