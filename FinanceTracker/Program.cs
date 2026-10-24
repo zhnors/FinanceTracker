@@ -8,11 +8,11 @@
             Console.WriteLine($"Large expense detected: {record.Category} - {record.Amount}");
         }
 
-        public static void RunErrorTests(IFinanceService financeService)
+        public static async Task RunErrorTests(IFinanceService financeService)
         {
             try
             {
-                financeService.SearchByDate(new DateTime());
+                await financeService.SearchByDateAsync(new DateTime());
             }
             catch (ArgumentException ex)
             {
@@ -26,7 +26,7 @@
 
             try
             {
-                financeService.SearchByDate(new DateTime(2026, 7, 23), new DateTime(2026, 7, 20));
+                await financeService.SearchByDateAsync(new DateTime(2026, 7, 23), new DateTime(2026, 7, 20));
             }
             catch (ArgumentException ex)
             {
@@ -40,7 +40,7 @@
 
             try
             {
-                financeService.AddRecord(new ExpenseRecord
+                await financeService.AddRecordAsync(new ExpenseRecord
                 {
                     Id = 6,
                     Title = "Transport",
@@ -61,36 +61,36 @@
             }
         }
 
-        public static void RunMainDemo(IFinanceService financeService)
+        public static async Task RunMainDemo(IFinanceService financeService)
         {
-            PrintRecords(financeService.GetAllRecords());
+            PrintRecords(await financeService.GetAllRecordsAsync());
 
-            var a = financeService.IncomeAmount();
+            var a = await financeService.IncomeAmountAsync();
             Console.WriteLine(a);
 
-            a = financeService.ExpenseAmount();
+            a = await financeService.ExpenseAmountAsync();
             Console.WriteLine(a);
 
-            a = financeService.TotalAmount();
+            a = await financeService.TotalAmountAsync();
             Console.WriteLine(a);
 
-            PrintRecords(financeService.SearchByCategory("Rent"));
+            PrintRecords(await financeService.SearchByCategoryAsync("Rent"));
 
-            PrintRecords(financeService.SearchByDate(new DateTime(2026, 7, 20), DateTime.Now));
+            PrintRecords(await financeService.SearchByDateAsync(new DateTime(2026, 7, 20), DateTime.Now));
 
-            PrintRecords(financeService.GetTopExpenses(3));      
+            PrintRecords(await financeService.GetTopExpensesAsync(3));      
         }
 
-        public static async Task TestJsonDemo(IFinanceService financeService)
+        public static async Task TestJsonDemo(FinanceService financeService)
         {         
             await financeService.SaveToJsonFileAsync(@"D:\STUDING\Programming\self-study_C#\finance.json");
 
-            financeService.DeleteAllRecords();
-            PrintRecords(financeService.GetAllRecords());
+            await financeService.DeleteAllRecordsAsync();
+            PrintRecords(await financeService.GetAllRecordsAsync());
 
             await financeService.LoadFromJsonFileAsync(@"D:\STUDING\Programming\self-study_C#\finance.json");
 
-            PrintRecords(financeService.GetAllRecords());
+            PrintRecords(await financeService.GetAllRecordsAsync());
         }
 
         public static void PrintRecords(IEnumerable<FinancialRecord> records)
@@ -104,7 +104,7 @@
 
         static async Task Main(string[] args)
         {
-            IFinanceService financeService = new FinanceService();
+            FinanceService financeService = new FinanceService();
 
             financeService.LargeExpense += LargeExpenseNotif;
 
@@ -163,15 +163,15 @@
                 ExpenseType = Enums.ExpenseTypes.Transport
             };
 
-            financeService.AddRecord(income1);
-            financeService.AddRecord(income2);
+            await financeService.AddRecordAsync(income1);
+            await financeService.AddRecordAsync(income2);
 
-            financeService.AddRecord(expense1);
-            financeService.AddRecord(expense2);
-            financeService.AddRecord(expense3);
+            await financeService.AddRecordAsync(expense1);
+            await financeService.AddRecordAsync(expense2);
+            await financeService.AddRecordAsync(expense3);
 
-            RunMainDemo(financeService);
-            RunErrorTests(financeService);
+            await RunMainDemo(financeService);
+            await RunErrorTests(financeService);
             await TestJsonDemo(financeService);
         }
     }
