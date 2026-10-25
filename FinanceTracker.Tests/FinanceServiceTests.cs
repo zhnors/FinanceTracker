@@ -22,8 +22,7 @@ namespace FinanceTracker.Tests
                 Amount = amount,
                 Date = new DateTime(2026, 7, 20),
                 Category = category,
-                Description = "Monthly salary",
-                IncomeType = IncomeTypes.Salary
+                Description = "Monthly salary"
             };
         }
 
@@ -36,8 +35,7 @@ namespace FinanceTracker.Tests
                 Amount = amount,
                 Date = new DateTime(2026, 7, 20),
                 Category = category,
-                Description = "Monthly rent",
-                ExpenseType = ExpenseTypes.Rent
+                Description = "Monthly rent"
             };
         }
 

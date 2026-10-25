@@ -28,22 +28,10 @@ namespace FinanceTracker.Api.Dtos
         public string Description { get; init; } = string.Empty;
 
         [Required]
-        public RecordTypes? RecordType { get; init; }
-        public IncomeTypes? IncomeType { get; init; }
-        public ExpenseTypes? ExpenseType { get; init; }
+        public RecordTypes? RecordType { get; init; }     
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (RecordType == RecordTypes.Income && IncomeType is null)
-                yield return new ValidationResult(
-                    "IncomeType is required for income records",
-                    new[] { nameof(IncomeType) });
-
-            if (RecordType == RecordTypes.Expense && ExpenseType is null)
-                yield return new ValidationResult(
-                    "ExpenseType is required for expense records",
-                    new[] { nameof(ExpenseType) });
-
             if(Date > DateTime.Now)
                 yield return new ValidationResult(
                     "Date can’t be in the future",
