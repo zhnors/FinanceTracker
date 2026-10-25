@@ -13,6 +13,17 @@ namespace FinanceTracker
 
         public Task AddRecordAsync(FinancialRecord record)
         {
+            ArgumentNullException.ThrowIfNull(record);
+
+            if (record.Id == 0) 
+            {
+                if (RecordList.Count == 0) record.Id = 1;
+
+                else record.Id = RecordList.Max(r => r.Id) + 1;
+            }
+
+            if (RecordList.Exists(r => r.Id == record.Id)) throw new InvalidOperationException($"Record with Id {record.Id} already exists");
+
             ValidateRecord(record);
 
             RecordList.Add(record);

@@ -5,10 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace FinanceTracker.Api.Dtos
 {
     public class CreateRecordRequest : IValidatableObject
-    {
-        [Range(1, int.MaxValue)]
-        public int Id { get; init; }
-
+    {    
         [Required]
         [StringLength(100)]
         public string Title { get; init; } = string.Empty;

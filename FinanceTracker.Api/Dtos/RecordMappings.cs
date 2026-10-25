@@ -44,8 +44,7 @@ namespace FinanceTracker.Api.Dtos
             if (request.RecordType == RecordTypes.Income)
             {
                 IncomeRecord incomeRecord = new IncomeRecord
-                {
-                    Id = request.Id,
+                {               
                     Title = request.Title,
                     Amount = request.Amount,
                     Date = request.Date.Value,
@@ -58,7 +57,6 @@ namespace FinanceTracker.Api.Dtos
             {
                 ExpenseRecord expenseRecord = new ExpenseRecord
                 {
-                    Id = request.Id,
                     Title = request.Title,
                     Amount = request.Amount,
                     Date = request.Date.Value,
