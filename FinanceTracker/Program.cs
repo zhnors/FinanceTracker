@@ -46,8 +46,7 @@
                     Title = "Transport",
                     Date = new DateTime(2026, 6, 20),
                     Category = "Transport",
-                    Description = "Taxi and public transport",
-                    ExpenseType = Enums.ExpenseTypes.Transport
+                    Description = "Taxi and public transport"
                 });
             }
             catch (ArgumentException ex)
@@ -115,8 +114,7 @@
                 Amount = 30000,
                 Date = DateTime.Now,
                 Category = "Salary",
-                Description = "Monthly salary" ,
-                IncomeType = Enums.IncomeTypes.Salary
+                Description = "Monthly salary" 
             };
 
             IncomeRecord income2 = new IncomeRecord
@@ -126,8 +124,7 @@
                 Amount = 8000,
                 Date = new DateTime(2026,7,20),
                 Category = "Freelance",
-                Description = "Small freelance project" ,
-                IncomeType = Enums.IncomeTypes.Freelance
+                Description = "Small freelance project" 
             };
 
             ExpenseRecord expense1 = new ExpenseRecord
@@ -137,8 +134,7 @@
                 Amount = 12000,
                 Date = DateTime.Now,
                 Category = "Rent",
-                Description = "Monthly apartment rent" ,
-                ExpenseType =Enums.ExpenseTypes.Rent
+                Description = "Monthly apartment rent" 
             };
 
             ExpenseRecord expense2 = new ExpenseRecord
@@ -148,8 +144,7 @@
                 Amount = 2500,
                 Date = new DateTime(2026, 7, 1),
                 Category = "Food",
-                Description = "Groceries" ,
-                ExpenseType = Enums.ExpenseTypes.Food
+                Description = "Groceries" 
             };
 
             ExpenseRecord expense3 = new ExpenseRecord
@@ -159,8 +154,7 @@
                 Amount = 900,
                 Date = new DateTime(2026, 6, 20),
                 Category = "Transport",
-                Description = "Taxi and public transport" ,
-                ExpenseType = Enums.ExpenseTypes.Transport
+                Description = "Taxi and public transport" 
             };
 
             await financeService.AddRecordAsync(income1);

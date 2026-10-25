@@ -17,9 +17,7 @@ namespace FinanceTracker.Api.Dtos
                     Date = incomeRecord.Date,
                     Category = incomeRecord.Category,
                     Description = incomeRecord.Description,
-                    RecordType = RecordTypes.Income,
-                    IncomeType = incomeRecord.IncomeType,
-                    ExpenseType = null
+                    RecordType = RecordTypes.Income
                 };
                 return recordResponse;
             }
@@ -33,9 +31,7 @@ namespace FinanceTracker.Api.Dtos
                     Date = expenseRecord.Date,
                     Category = expenseRecord.Category,
                     Description = expenseRecord.Description,
-                    RecordType = RecordTypes.Expense,
-                    IncomeType = null,
-                    ExpenseType = expenseRecord.ExpenseType
+                    RecordType = RecordTypes.Expense
                 };
                 return recordResponse;
             }
@@ -48,14 +44,12 @@ namespace FinanceTracker.Api.Dtos
             if (request.RecordType == RecordTypes.Income)
             {
                 IncomeRecord incomeRecord = new IncomeRecord
-                {
-                    Id = request.Id,
+                {               
                     Title = request.Title,
                     Amount = request.Amount,
                     Date = request.Date.Value,
                     Category = request.Category,
-                    Description = request.Description,
-                    IncomeType = request.IncomeType.Value
+                    Description = request.Description
                 };
                 return incomeRecord;
             }
@@ -63,13 +57,11 @@ namespace FinanceTracker.Api.Dtos
             {
                 ExpenseRecord expenseRecord = new ExpenseRecord
                 {
-                    Id = request.Id,
                     Title = request.Title,
                     Amount = request.Amount,
                     Date = request.Date.Value,
                     Category = request.Category,
-                    Description = request.Description,
-                    ExpenseType = request.ExpenseType.Value
+                    Description = request.Description
                 };
                 return expenseRecord;
             }
@@ -87,8 +79,7 @@ namespace FinanceTracker.Api.Dtos
                     Amount = request.Amount,
                     Date = request.Date.Value,
                     Category = request.Category,
-                    Description = request.Description,            
-                    IncomeType = incomeRecord.IncomeType
+                    Description = request.Description
                 };
                 return updatedIncome;
             }
@@ -101,8 +92,7 @@ namespace FinanceTracker.Api.Dtos
                     Amount = request.Amount,
                     Date = request.Date.Value,
                     Category = request.Category,
-                    Description = request.Description,                 
-                    ExpenseType = expenseRecord.ExpenseType
+                    Description = request.Description
                 };
                 return updatedExpense;
             }

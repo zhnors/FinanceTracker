@@ -13,6 +13,17 @@ namespace FinanceTracker
 
         public Task AddRecordAsync(FinancialRecord record)
         {
+            ArgumentNullException.ThrowIfNull(record);
+
+            if (record.Id == 0) 
+            {
+                if (RecordList.Count == 0) record.Id = 1;
+
+                else record.Id = RecordList.Max(r => r.Id) + 1;
+            }
+
+            if (RecordList.Exists(r => r.Id == record.Id)) throw new InvalidOperationException($"Record with Id {record.Id} already exists");
+
             ValidateRecord(record);
 
             RecordList.Add(record);
@@ -183,9 +194,7 @@ namespace FinanceTracker
                         Date = incomeRecord.Date,
                         Category = incomeRecord.Category,
                         Description = incomeRecord.Description,
-                        RecordType = RecordTypes.Income,
-                        IncomeType = incomeRecord.IncomeType,
-                        ExpenseType = null
+                        RecordType = RecordTypes.Income
                     };
 
                     dtoRecords.Add(dtoRec);
@@ -200,9 +209,7 @@ namespace FinanceTracker
                         Date = expenseRecord.Date,
                         Category = expenseRecord.Category,
                         Description = expenseRecord.Description,
-                        RecordType = RecordTypes.Expense,
-                        IncomeType = null,
-                        ExpenseType = expenseRecord.ExpenseType
+                        RecordType = RecordTypes.Expense
                     };
 
                     dtoRecords.Add(dtoRec);
@@ -221,11 +228,6 @@ namespace FinanceTracker
             {
                 if (record.RecordType == RecordTypes.Income)
                 {
-                    if (record.IncomeType == null)
-                    {
-                        throw new FormatException("IncomeType is missing");
-                    }
-
                     IncomeRecord incomeRecord = new IncomeRecord
                     {
                         Id = record.Id,
@@ -233,19 +235,13 @@ namespace FinanceTracker
                         Amount = record.Amount,
                         Date = record.Date,
                         Category = record.Category,
-                        Description = record.Description,
-                        IncomeType = record.IncomeType.Value
+                        Description = record.Description
                     };
 
                     financialRecords.Add(incomeRecord);
                 }
                 else if (record.RecordType == RecordTypes.Expense)
                 {
-                    if (record.ExpenseType == null)
-                    {
-                        throw new FormatException("ExpenseType is missing");
-                    }
-
                     ExpenseRecord expenseRecord = new ExpenseRecord
                     {
                         Id = record.Id,
@@ -253,8 +249,7 @@ namespace FinanceTracker
                         Amount = record.Amount,
                         Date = record.Date,
                         Category = record.Category,
-                        Description = record.Description,
-                        ExpenseType = record.ExpenseType.Value
+                        Description = record.Description
                     };
 
                     financialRecords.Add(expenseRecord);
@@ -270,8 +265,6 @@ namespace FinanceTracker
             if (record == null) throw new ArgumentNullException(nameof(record));
 
             if (string.IsNullOrWhiteSpace(record.Title)) throw new ArgumentException(nameof(record.Title));
-
-            if (string.IsNullOrWhiteSpace(record.Description)) throw new ArgumentException(nameof(record.Description));
 
             if (string.IsNullOrWhiteSpace(record.Category)) throw new ArgumentException(nameof(record.Category));
 

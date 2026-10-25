@@ -13,7 +13,7 @@ namespace FinanceTracker.Tests
             service = new FinanceService();
         }
 
-        private static IncomeRecord CreateIncome(int id = 1, decimal amount = 30000, string title = "Salary", string category = "Salary")
+        private static IncomeRecord CreateIncome(int id = 0, decimal amount = 30000, string title = "Salary", string category = "Salary")
         {
             return new IncomeRecord
             {
@@ -22,12 +22,11 @@ namespace FinanceTracker.Tests
                 Amount = amount,
                 Date = new DateTime(2026, 7, 20),
                 Category = category,
-                Description = "Monthly salary",
-                IncomeType = IncomeTypes.Salary
+                Description = "Monthly salary"
             };
         }
 
-        private static ExpenseRecord CreateExpense(int id = 2, decimal amount = 12000, string title = "Rent", string category = "Rent")
+        private static ExpenseRecord CreateExpense(int id = 0, decimal amount = 12000, string title = "Rent", string category = "Rent")
         {
             return new ExpenseRecord
             {
@@ -36,8 +35,7 @@ namespace FinanceTracker.Tests
                 Amount = amount,
                 Date = new DateTime(2026, 7, 20),
                 Category = category,
-                Description = "Monthly rent",
-                ExpenseType = ExpenseTypes.Rent
+                Description = "Monthly rent"
             };
         }
 
@@ -114,22 +112,6 @@ namespace FinanceTracker.Tests
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        public async Task AddRecord_InvalidDescription_ThrowsArgumentException(string description)
-        {
-            //Arrange
-            var record = CreateExpense();
-
-            record.Description = description;
-
-            //Act
-            //Assert
-
-            await Assert.ThrowsAsync<ArgumentException>(() => service.AddRecordAsync(record));
-        }
-
-        [Theory]
         [InlineData(0)]
         [InlineData(-100)]
         public async Task AddRecord_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
@@ -144,7 +126,6 @@ namespace FinanceTracker.Tests
         }
 
         [Theory]
-        [InlineData(0)]
         [InlineData(-25)]
         public async Task AddRecord_InvalidId_ThrowsArgumentOutOfRangeException(int id)
         {
@@ -155,6 +136,37 @@ namespace FinanceTracker.Tests
             //Assert
 
             await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => service.AddRecordAsync(record));
+        }
+
+        [Fact]
+        public async Task AddRecord_RecordWithoutId_GetsId() 
+        {
+            var record = CreateIncome();
+
+            await service.AddRecordAsync(record);
+
+            Assert.Equal(1, record.Id);
+        }
+
+        [Fact]
+        public async Task AddRecord_TwoRecordsWithSameId_ThrowsInvalidOperationException() 
+        {
+            await service.AddRecordAsync(CreateIncome(id: 1));
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.AddRecordAsync(CreateExpense(id: 1)));
+        }
+
+        [Fact]
+        public async Task AddRecord_RecordsWithoutId_GetSequentialIds()
+        {
+            var first = CreateIncome();
+            var second = CreateExpense();
+
+            await service.AddRecordAsync(first);
+            await service.AddRecordAsync(second);
+
+            Assert.Equal(1, first.Id);
+            Assert.Equal(2, second.Id);
         }
 
         [Fact]
@@ -299,11 +311,11 @@ namespace FinanceTracker.Tests
 
             secondExpense.Date = new DateTime(2026, 8, 20);
 
-            var firstIncome = CreateIncome(id: 1);
+            var firstIncome = CreateIncome();
 
             firstIncome.Date = fromDate;
 
-            var secondIncome = CreateIncome(id: 2);
+            var secondIncome = CreateIncome();
 
             secondIncome.Date = toDate;
 

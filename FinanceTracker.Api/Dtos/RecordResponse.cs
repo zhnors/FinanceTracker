@@ -11,6 +11,4 @@ public class RecordResponse
     public string Category { get; init; } = string.Empty;
     public string? Description { get; init; }
     public RecordTypes RecordType { get; init; }
-    public IncomeTypes? IncomeType { get; init; }
-    public ExpenseTypes? ExpenseType { get; init; }
 }

@@ -29,7 +29,9 @@ public class RecordsController : ControllerBase
     {
         return Ok(new 
         {   Income = await _financeService.IncomeAmountAsync(),
+
             Expense = await _financeService.ExpenseAmountAsync(),
+
             Total = await _financeService.TotalAmountAsync() 
         });
     }
@@ -80,7 +82,9 @@ public class RecordsController : ControllerBase
     public async Task<IActionResult> DeleteRecord(int id) 
     {
         var result = await _financeService.DeleteRecordAsync(id);
+
         if (result) return NoContent();
+
         else return NotFound();
     }
 
@@ -90,8 +94,9 @@ public class RecordsController : ControllerBase
         try
         {
             var record = request.ToRecord();
-            if (await _financeService.GetRecordByIdAsync(record.Id) != null) return Conflict();
+            
             await _financeService.AddRecordAsync(record);
+
             return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
         }
         catch (ArgumentException ex)
@@ -104,12 +109,15 @@ public class RecordsController : ControllerBase
     public async Task<IActionResult> Update(int id, UpdateRecordRequest request)
     {
         var existing = await _financeService.GetRecordByIdAsync(id);
+
         if (existing is null) return NotFound();
 
         try
         {
             var updated = request.ToRecord(existing);
+
             await _financeService.UpdateRecordAsync(updated);
+
             return NoContent();
         }
         catch (ArgumentException ex)

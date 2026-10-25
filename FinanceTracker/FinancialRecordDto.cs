@@ -5,15 +5,12 @@ namespace FinanceTracker
     internal class FinancialRecordDto
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
-        public string Category { get; set; }
-        public string Description { get; set; }
-        public RecordTypes RecordType { get; set; }
-        public IncomeTypes? IncomeType { get; set; }
-        public ExpenseTypes? ExpenseType { get; set; }
-
+        public string Category { get; set; } = string.Empty;
+        public string? Description { get; set; }
+        public RecordTypes RecordType { get; set; }     
         public FinancialRecordDto() { }
 
         public FinancialRecordDto(
@@ -23,9 +20,7 @@ namespace FinanceTracker
             DateTime date,
             string category,
             string description,
-            RecordTypes recordType,
-            IncomeTypes? incomeType,
-            ExpenseTypes? expenseType)
+            RecordTypes recordType)
         {
             Id = id;
             Title = title;
@@ -33,9 +28,7 @@ namespace FinanceTracker
             Date = date;
             Category = category;
             Description = description;
-            RecordType = recordType;
-            IncomeType = incomeType;
-            ExpenseType = expenseType;
+            RecordType = recordType;            
         }
  
     }

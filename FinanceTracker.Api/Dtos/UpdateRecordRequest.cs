@@ -19,9 +19,8 @@ namespace FinanceTracker.Api.Dtos
         [StringLength(100)]
         public string Category { get; init; } = string.Empty;
 
-        [Required]
         [StringLength(150)]
-        public string Description { get; init; } = string.Empty;
+        public string? Description { get; init; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

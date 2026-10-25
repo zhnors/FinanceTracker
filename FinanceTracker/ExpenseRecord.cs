@@ -3,9 +3,7 @@
 namespace FinanceTracker
 {
     public class ExpenseRecord : FinancialRecord //витрата 
-    {
-        public ExpenseTypes ExpenseType { get; set; }
-
+    {    
         public ExpenseRecord() : base() { }
 
         public ExpenseRecord(
@@ -14,11 +12,7 @@ namespace FinanceTracker
             decimal amount,
             DateTime date,
             string category, 
-            string description,
-            ExpenseTypes expenseType) 
-                : base(id, title, amount, date, category, description)
-        {
-            ExpenseType = expenseType;
-        }
+            string description) 
+                : base(id, title, amount, date, category, description) { }
     }
 }
