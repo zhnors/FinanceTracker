@@ -2,7 +2,6 @@
 {
     internal class Program
     {
-
         public static void LargeExpenseNotif(FinancialRecord record)
         {
             Console.WriteLine($"Large expense detected: {record.Category} - {record.Amount}");

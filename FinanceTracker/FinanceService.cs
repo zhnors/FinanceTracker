@@ -5,8 +5,6 @@ namespace FinanceTracker
 {
     public class FinanceService : IFinanceService, IRecordFileStorage
     {
-        readonly decimal largeExpenseLimit = 10000;
-
         public event LargeExpenseDelegate? LargeExpense;
 
         List<FinancialRecord> RecordList = new List<FinancialRecord>();
@@ -14,6 +12,8 @@ namespace FinanceTracker
         public Task AddRecordAsync(FinancialRecord record)
         {
             ArgumentNullException.ThrowIfNull(record);
+
+            if (record.Id < 0) throw new ArgumentOutOfRangeException(nameof(record.Id));
 
             if (record.Id == 0) 
             {
@@ -24,11 +24,11 @@ namespace FinanceTracker
 
             if (RecordList.Exists(r => r.Id == record.Id)) throw new InvalidOperationException($"Record with Id {record.Id} already exists");
 
-            ValidateRecord(record);
+            FinancialRecordValidator.Validate(record);
 
             RecordList.Add(record);
 
-            if (record is ExpenseRecord && record.Amount >= largeExpenseLimit)
+            if (record is ExpenseRecord && record.Amount >= FinanceRules.LargeExpenseLimit)
             {
                 LargeExpense?.Invoke(record);
             }
@@ -132,7 +132,7 @@ namespace FinanceTracker
 
             if (index == -1) return Task.FromResult(false);
 
-            ValidateRecord(record);
+            FinancialRecordValidator.Validate(record);
 
             RecordList[index] = record;
 
@@ -258,23 +258,6 @@ namespace FinanceTracker
             }
 
             return financialRecords;
-        }
-
-        private static void ValidateRecord(FinancialRecord record)
-        {
-            if (record == null) throw new ArgumentNullException(nameof(record));
-
-            if (string.IsNullOrWhiteSpace(record.Title)) throw new ArgumentException(nameof(record.Title));
-
-            if (string.IsNullOrWhiteSpace(record.Category)) throw new ArgumentException(nameof(record.Category));
-
-            if (record.Id <= 0) throw new ArgumentOutOfRangeException(nameof(record.Id));
-
-            if (record.Amount <= 0) throw new ArgumentOutOfRangeException(nameof(record.Amount));
-
-            if (record.Date > DateTime.Now) throw new ArgumentOutOfRangeException(nameof(record.Date));
-
-            if (record.Date == default) throw new ArgumentOutOfRangeException(nameof(record.Date));
         }
     }
 }
