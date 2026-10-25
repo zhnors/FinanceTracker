@@ -266,8 +266,6 @@ namespace FinanceTracker
 
             if (string.IsNullOrWhiteSpace(record.Title)) throw new ArgumentException(nameof(record.Title));
 
-            if (string.IsNullOrWhiteSpace(record.Description)) throw new ArgumentException(nameof(record.Description));
-
             if (string.IsNullOrWhiteSpace(record.Category)) throw new ArgumentException(nameof(record.Category));
 
             if (record.Id <= 0) throw new ArgumentOutOfRangeException(nameof(record.Id));

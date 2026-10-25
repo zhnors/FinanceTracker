@@ -112,22 +112,6 @@ namespace FinanceTracker.Tests
         }
 
         [Theory]
-        [InlineData("")]
-        [InlineData(" ")]
-        public async Task AddRecord_InvalidDescription_ThrowsArgumentException(string description)
-        {
-            //Arrange
-            var record = CreateExpense();
-
-            record.Description = description;
-
-            //Act
-            //Assert
-
-            await Assert.ThrowsAsync<ArgumentException>(() => service.AddRecordAsync(record));
-        }
-
-        [Theory]
         [InlineData(0)]
         [InlineData(-100)]
         public async Task AddRecord_InvalidAmount_ThrowsArgumentOutOfRangeException(int amount)
