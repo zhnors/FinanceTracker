@@ -35,8 +35,6 @@ public class EfFinanceService : IFinanceService
 
         var entity = new FinancialRecordEntity
         {
-            Id = record.Id,
-
             Title = record.Title,
 
             Amount = record.Amount,
@@ -77,47 +75,86 @@ public class EfFinanceService : IFinanceService
         return entities.Select(ToModel).ToList();
     }
 
-    public Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
+    public async Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
     {
-        throw new NotImplementedException();
+        FinancialRecordValidator.ValidateSearchCategory(category);
+
+        var entities = await RecordsWithDetails()
+            .Where(r => r.Category.Name == category)
+            .OrderBy(r => r.Id)
+            .ToListAsync();
+
+        return entities.Select(ToModel).ToList();
     }
 
-    public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
+    public async Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
     {
-        throw new NotImplementedException();
+        FinancialRecordValidator.ValidateSearchDate(date);
+
+        var start = date.Date;
+        var end = start.AddDays(1);
+
+        var entities = await RecordsWithDetails()
+            .Where(r => r.Date >= start && r.Date < end)
+            .OrderBy(r => r.Id)
+            .ToListAsync();
+
+        return entities.Select(ToModel).ToList();
     }
 
-    public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
+    public async Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
     {
-        throw new NotImplementedException();
+        FinancialRecordValidator.ValidateSearchRange(fromDate, toDate);
+
+        var start = fromDate.Date;
+        var end = toDate.Date.AddDays(1);
+
+        var entities = await RecordsWithDetails()
+            .Where(r => r.Date >= start && r.Date < end)
+            .OrderBy(r => r.Id)
+            .ToListAsync();
+
+        return entities.Select(ToModel).ToList();
     }
 
     public async Task<FinancialRecord?> GetRecordByIdAsync(int id)
     {
         var entity = await RecordsWithDetails()
-        .FirstOrDefaultAsync(r => r.Id == id);
+            .FirstOrDefaultAsync(r => r.Id == id);
 
         return entity is null ? null : ToModel(entity);
     }
 
-    public Task<decimal> IncomeAmountAsync()
+    public async Task<decimal> IncomeAmountAsync()
     {
-        throw new NotImplementedException();
+        return await _context.FinancialRecords
+        .Where(r => r.RecordType.Name == IncomeTypeName)
+        .SumAsync(r => r.Amount);
     }
 
-    public Task<decimal> ExpenseAmountAsync()
+    public async Task<decimal> ExpenseAmountAsync()
     {
-        throw new NotImplementedException();
+        return await _context.FinancialRecords
+        .Where(r => r.RecordType.Name == ExpenseTypeName)
+        .SumAsync(r => r.Amount);
     }
 
-    public Task<decimal> TotalAmountAsync()
+    public async Task<decimal> TotalAmountAsync()
     {
-        throw new NotImplementedException();
+        return await _context.FinancialRecords       
+        .SumAsync(r => r.RecordType.Name == ExpenseTypeName ? -r.Amount : r.Amount);
     }
 
-    public Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count = 3)
+    public async Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count = 3)
     {
-        throw new NotImplementedException();
+
+        var entities = await RecordsWithDetails()
+        .Where(r => r.RecordType.Name == ExpenseTypeName)
+        .OrderByDescending(r => r.Amount)
+        .Take(count)
+        .ToListAsync();
+
+        return entities.Select(ToModel).Cast<ExpenseRecord>().ToList();
     }
 
     public Task<bool> UpdateRecordAsync(FinancialRecord record)
@@ -142,8 +179,8 @@ public class EfFinanceService : IFinanceService
     {
         FinancialRecord record = entity.RecordType.Name switch
         {
-            "Income" => new IncomeRecord(),
-            "Expense" => new ExpenseRecord(),
+            IncomeTypeName => new IncomeRecord(),
+            ExpenseTypeName => new ExpenseRecord(),
             _ => throw new InvalidOperationException($"Unknown record type: {entity.RecordType.Name}")
         };
 

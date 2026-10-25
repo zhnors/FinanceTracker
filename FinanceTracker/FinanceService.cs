@@ -1,5 +1,6 @@
 ﻿using FinanceTracker.Enums;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinanceTracker
 {
@@ -60,7 +61,7 @@ namespace FinanceTracker
 
         public Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
         {
-           if (string.IsNullOrEmpty(category)) throw new ArgumentNullException();
+            FinancialRecordValidator.ValidateSearchCategory(category);
 
             IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Category == category).ToList();
 
@@ -69,9 +70,8 @@ namespace FinanceTracker
 
         public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
         {
-            if (date > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
-            if (date == default) throw new ArgumentException("Date is out of range");
-
+            FinancialRecordValidator.ValidateSearchDate(date);
+            
             IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Date.Date == date.Date).ToList();
 
             return Task.FromResult(result);
@@ -79,8 +79,7 @@ namespace FinanceTracker
 
         public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
         {
-            if (fromDate > DateTime.Now || toDate > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
-            if (fromDate > toDate) throw new ArgumentException("The start date must be earlier than or equal to the end date.");
+            FinancialRecordValidator.ValidateSearchRange(fromDate, toDate);
 
             IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date).ToList();
             
