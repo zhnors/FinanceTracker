@@ -21,7 +21,7 @@ Accept: application/json
 
 ###
 
-GET {{FinanceTracker.Api_HostAddress}}/records/by-date?from=2026-10-09&to=2026-10-09
+GET {{FinanceTracker.Api_HostAddress}}/records/by-date?from=2026-10-09&to=2027-10-09
 Accept: application/json
 
 ###
@@ -73,10 +73,10 @@ POST {{FinanceTracker.Api_HostAddress}}/records
 Content-Type: application/json
 
 {
-  "title": "" ,
+  "title": "hhh" ,
   "amount": 5000,
   "date": "2026-10-01",
-  "category": "Bonus",
+  "category": "Abobus",
   "description": "Quarterly bonus",
   "recordType": "Income"
 }

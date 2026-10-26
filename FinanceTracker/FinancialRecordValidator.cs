@@ -22,24 +22,25 @@ namespace FinanceTracker
 
         public static void ValidateSearchDate(DateTime date)
         {
-            if (date > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
+            if (date > DateTime.Now) throw new ArgumentOutOfRangeException(nameof(date), "Date is out of range");
 
             if (date == default) throw new ArgumentException("Date is out of range");
         }
 
         public static void ValidateSearchRange(DateTime from, DateTime to)
         {
-            if (from > DateTime.Now || to > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
+            if (from > DateTime.Now)
+                throw new ArgumentOutOfRangeException(nameof(from), "Date can't be in the future");
+
+            if (to > DateTime.Now)
+                throw new ArgumentOutOfRangeException(nameof(to), "Date can't be in the future");
 
             if (from > to) throw new ArgumentException("The start date must be earlier than or equal to the end date.");
         }
 
         public static void ValidateSearchCategory(string category) 
         {
-            if (string.IsNullOrEmpty(category)) throw new ArgumentNullException();
+            if (string.IsNullOrEmpty(category)) throw new ArgumentNullException(nameof(category));
         }
-
-        
-
     }
 }
