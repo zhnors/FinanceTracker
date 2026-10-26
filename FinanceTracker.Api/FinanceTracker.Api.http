@@ -129,7 +129,6 @@ POST {{FinanceTracker.Api_HostAddress}}/records
 Content-Type: application/json
 
 {
-  "id": 20,
   "title": "Groceries",
   "amount": 1500,
   "date": "2026-10-05",
@@ -140,7 +139,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{FinanceTracker.Api_HostAddress}}/records/20
+PUT {{FinanceTracker.Api_HostAddress}}/records/3
 Content-Type: application/json
 
 {
@@ -153,7 +152,7 @@ Content-Type: application/json
 
 ###
 
-GET {{FinanceTracker.Api_HostAddress}}/records/20
+GET {{FinanceTracker.Api_HostAddress}}/records/3
 Accept: application/json
 
 ###

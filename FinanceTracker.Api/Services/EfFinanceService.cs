@@ -27,11 +27,7 @@ public class EfFinanceService : IFinanceService
 
         var typeName = record is IncomeRecord ? IncomeTypeName : ExpenseTypeName;
 
-        var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Name == record.Category && c.RecordType.Name == typeName);
-
-        if (category is null)
-            throw new ArgumentException($"Category '{record.Category}' does not exist for {typeName}");
+        var category = await FindCategoryAsync(record.Category, typeName);
 
         var entity = new FinancialRecordEntity
         {
@@ -61,9 +57,22 @@ public class EfFinanceService : IFinanceService
         }
     }
 
-    public Task<bool> DeleteRecordAsync(int id)
+    public async Task<bool> DeleteRecordAsync(int id)
     {
-        throw new NotImplementedException();
+        var isFound = false;
+
+        var entity = await _context.FinancialRecords.FindAsync(id);
+
+        if (entity != null) 
+        {
+            _context.FinancialRecords.Remove(entity);
+
+            await _context.SaveChangesAsync();
+
+            isFound = true;
+        }
+
+        return isFound;        
     }
 
     public async Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync()
@@ -157,14 +166,36 @@ public class EfFinanceService : IFinanceService
         return entities.Select(ToModel).Cast<ExpenseRecord>().ToList();
     }
 
-    public Task<bool> UpdateRecordAsync(FinancialRecord record)
+    public async Task<bool> UpdateRecordAsync(FinancialRecord record)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(record);
+        FinancialRecordValidator.Validate(record);
+
+        var entity = await _context.FinancialRecords
+            .Include(r => r.RecordType)
+            .FirstOrDefaultAsync(r => r.Id == record.Id);
+
+        if (entity == null) return false;
+
+        if ((record is IncomeRecord) != (entity.RecordType.Name == IncomeTypeName)) 
+            throw new ArgumentException("Record type cannot be changed");
+
+        var category = await FindCategoryAsync(record.Category, entity.RecordType.Name);
+
+        entity.Title = record.Title;
+        entity.Amount = record.Amount;
+        entity.Date = record.Date;
+        entity.Description = record.Description;
+        entity.CategoryId = category.Id;
+
+        await _context.SaveChangesAsync();
+
+        return true;   
     }
 
-    public Task DeleteAllRecordsAsync()
+    public async Task DeleteAllRecordsAsync()
     {
-        throw new NotImplementedException();
+        await _context.FinancialRecords.ExecuteDeleteAsync();
     }
 
     private IQueryable<FinancialRecordEntity> RecordsWithDetails()
@@ -193,5 +224,17 @@ public class EfFinanceService : IFinanceService
 
         return record;
     }
+
+    private async Task<Category> FindCategoryAsync(string name, string typeName)
+    {
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c => c.Name == name && c.RecordType.Name == typeName);
+
+        if (category is null)
+            throw new ArgumentException($"Category '{name}' does not exist for {typeName}");
+
+        return category;
+    }
+
 
 }
