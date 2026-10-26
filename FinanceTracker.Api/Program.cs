@@ -1,5 +1,6 @@
 using FinanceTracker;
 using FinanceTracker.Api.Data;
+using FinanceTracker.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -11,7 +12,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
-builder.Services.AddSingleton<IFinanceService, FinanceService>();
+builder.Services.AddScoped<IFinanceService, EfFinanceService>();
 
 builder.Services.AddDbContext<FinanceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FinanceDb")));

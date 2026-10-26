@@ -1,12 +1,11 @@
 ﻿using FinanceTracker.Enums;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinanceTracker
 {
     public class FinanceService : IFinanceService, IRecordFileStorage
     {
-        readonly decimal largeExpenseLimit = 10000;
-
         public event LargeExpenseDelegate? LargeExpense;
 
         List<FinancialRecord> RecordList = new List<FinancialRecord>();
@@ -14,6 +13,8 @@ namespace FinanceTracker
         public Task AddRecordAsync(FinancialRecord record)
         {
             ArgumentNullException.ThrowIfNull(record);
+
+            if (record.Id < 0) throw new ArgumentOutOfRangeException(nameof(record.Id));
 
             if (record.Id == 0) 
             {
@@ -24,11 +25,11 @@ namespace FinanceTracker
 
             if (RecordList.Exists(r => r.Id == record.Id)) throw new InvalidOperationException($"Record with Id {record.Id} already exists");
 
-            ValidateRecord(record);
+            FinancialRecordValidator.Validate(record);
 
             RecordList.Add(record);
 
-            if (record is ExpenseRecord && record.Amount >= largeExpenseLimit)
+            if (record is ExpenseRecord && record.Amount >= FinanceRules.LargeExpenseLimit)
             {
                 LargeExpense?.Invoke(record);
             }
@@ -60,7 +61,7 @@ namespace FinanceTracker
 
         public Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
         {
-           if (string.IsNullOrEmpty(category)) throw new ArgumentNullException();
+            FinancialRecordValidator.ValidateSearchCategory(category);
 
             IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Category == category).ToList();
 
@@ -69,9 +70,8 @@ namespace FinanceTracker
 
         public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
         {
-            if (date > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
-            if (date == default) throw new ArgumentException("Date is out of range");
-
+            FinancialRecordValidator.ValidateSearchDate(date);
+            
             IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Date.Date == date.Date).ToList();
 
             return Task.FromResult(result);
@@ -79,8 +79,7 @@ namespace FinanceTracker
 
         public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
         {
-            if (fromDate > DateTime.Now || toDate > DateTime.Now) throw new ArgumentOutOfRangeException("Date is out of range");
-            if (fromDate > toDate) throw new ArgumentException("The start date must be earlier than or equal to the end date.");
+            FinancialRecordValidator.ValidateSearchRange(fromDate, toDate);
 
             IReadOnlyList<FinancialRecord> result = RecordList.Where(record => record.Date.Date >= fromDate.Date && record.Date.Date <= toDate.Date).ToList();
             
@@ -132,7 +131,7 @@ namespace FinanceTracker
 
             if (index == -1) return Task.FromResult(false);
 
-            ValidateRecord(record);
+            FinancialRecordValidator.Validate(record);
 
             RecordList[index] = record;
 
@@ -258,23 +257,6 @@ namespace FinanceTracker
             }
 
             return financialRecords;
-        }
-
-        private static void ValidateRecord(FinancialRecord record)
-        {
-            if (record == null) throw new ArgumentNullException(nameof(record));
-
-            if (string.IsNullOrWhiteSpace(record.Title)) throw new ArgumentException(nameof(record.Title));
-
-            if (string.IsNullOrWhiteSpace(record.Category)) throw new ArgumentException(nameof(record.Category));
-
-            if (record.Id <= 0) throw new ArgumentOutOfRangeException(nameof(record.Id));
-
-            if (record.Amount <= 0) throw new ArgumentOutOfRangeException(nameof(record.Amount));
-
-            if (record.Date > DateTime.Now) throw new ArgumentOutOfRangeException(nameof(record.Date));
-
-            if (record.Date == default) throw new ArgumentOutOfRangeException(nameof(record.Date));
         }
     }
 }
