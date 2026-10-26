@@ -57,16 +57,9 @@ public class RecordsController : ControllerBase
     [HttpGet("by-date")]
     public async Task<ActionResult<IReadOnlyList<RecordResponse>>> SearchByDate(DateTime from, DateTime to)
     {
-        try
-        {
-            IReadOnlyList<FinancialRecord> result = await _financeService.SearchByDateAsync(from, to);
+        IReadOnlyList<FinancialRecord> result = await _financeService.SearchByDateAsync(from, to);
 
-            return Ok(result.Select(r => r.ToResponse()).ToList());
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return Ok(result.Select(r => r.ToResponse()).ToList());
     }
 
     [HttpGet("top-expenses")]
@@ -91,18 +84,11 @@ public class RecordsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<RecordResponse>> Create(CreateRecordRequest request)
     {
-        try
-        {
-            var record = request.ToRecord();
+        var record = request.ToRecord();
             
-            await _financeService.AddRecordAsync(record);
+        await _financeService.AddRecordAsync(record);
 
-            return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());        
     }
 
     [HttpPut("{id}")]
@@ -112,19 +98,10 @@ public class RecordsController : ControllerBase
 
         if (existing is null) return NotFound();
 
-        try
-        {
-            var updated = request.ToRecord(existing);
+        var updated = request.ToRecord(existing);
 
-            await _financeService.UpdateRecordAsync(updated);
+        await _financeService.UpdateRecordAsync(updated);
 
-            return NoContent();
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return NoContent();    
     }
-
-
 }

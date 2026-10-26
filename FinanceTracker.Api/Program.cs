@@ -1,5 +1,6 @@
 using FinanceTracker;
 using FinanceTracker.Api.Data;
+using FinanceTracker.Api.Infrastructure;
 using FinanceTracker.Api.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -20,9 +21,15 @@ builder.Services.AddDbContext<FinanceDbContext>(options =>
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
