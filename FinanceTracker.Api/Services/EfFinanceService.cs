@@ -20,14 +20,14 @@ public class EfFinanceService : IFinanceService
         _context = context;
     }
 
-    public async Task AddRecordAsync(FinancialRecord record)
+    public async Task AddRecordAsync(FinancialRecord record, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(record);
         FinancialRecordValidator.Validate(record);
 
         var typeName = record is IncomeRecord ? IncomeTypeName : ExpenseTypeName;
 
-        var category = await FindCategoryAsync(record.Category, typeName);
+        var category = await FindCategoryAsync(record.Category, typeName, cancellationToken);
 
         var entity = new FinancialRecordEntity
         {
@@ -47,7 +47,7 @@ public class EfFinanceService : IFinanceService
         };
 
         _context.FinancialRecords.Add(entity);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         record.Id = entity.Id;
 
@@ -57,17 +57,17 @@ public class EfFinanceService : IFinanceService
         }
     }
 
-    public async Task<bool> DeleteRecordAsync(int id)
+    public async Task<bool> DeleteRecordAsync(int id, CancellationToken cancellationToken = default )
     {
         var isFound = false;
 
-        var entity = await _context.FinancialRecords.FindAsync(id);
+        var entity = await _context.FinancialRecords.FindAsync(new object [] { id }, cancellationToken);
 
         if (entity != null) 
         {
             _context.FinancialRecords.Remove(entity);
 
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
 
             isFound = true;
         }
@@ -75,28 +75,28 @@ public class EfFinanceService : IFinanceService
         return isFound;        
     }
 
-    public async Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync()
+    public async Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync(CancellationToken cancellationToken = default)
     {
         var entities = await RecordsWithDetails()
          .OrderBy(r => r.Id)
-         .ToListAsync();
+         .ToListAsync(cancellationToken);
 
         return entities.Select(ToModel).ToList();
     }
 
-    public async Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
+    public async Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category, CancellationToken cancellationToken = default)
     {
         FinancialRecordValidator.ValidateSearchCategory(category);
 
         var entities = await RecordsWithDetails()
             .Where(r => r.Category.Name == category)
             .OrderBy(r => r.Id)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return entities.Select(ToModel).ToList();
     }
 
-    public async Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
+    public async Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date, CancellationToken cancellationToken = default)
     {
         FinancialRecordValidator.ValidateSearchDate(date);
 
@@ -106,12 +106,12 @@ public class EfFinanceService : IFinanceService
         var entities = await RecordsWithDetails()
             .Where(r => r.Date >= start && r.Date < end)
             .OrderBy(r => r.Id)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return entities.Select(ToModel).ToList();
     }
 
-    public async Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
+    public async Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
     {
         FinancialRecordValidator.ValidateSearchRange(fromDate, toDate);
 
@@ -121,66 +121,66 @@ public class EfFinanceService : IFinanceService
         var entities = await RecordsWithDetails()
             .Where(r => r.Date >= start && r.Date < end)
             .OrderBy(r => r.Id)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return entities.Select(ToModel).ToList();
     }
 
-    public async Task<FinancialRecord?> GetRecordByIdAsync(int id)
+    public async Task<FinancialRecord?> GetRecordByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         var entity = await RecordsWithDetails()
-            .FirstOrDefaultAsync(r => r.Id == id);
+            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
 
         return entity is null ? null : ToModel(entity);
     }
 
-    public async Task<decimal> IncomeAmountAsync()
+    public async Task<decimal> IncomeAmountAsync(CancellationToken cancellationToken = default)
     {
         return await _context.FinancialRecords
         .Where(r => r.RecordType.Name == IncomeTypeName)
-        .SumAsync(r => r.Amount);
+        .SumAsync(r => r.Amount, cancellationToken);
     }
 
-    public async Task<decimal> ExpenseAmountAsync()
+    public async Task<decimal> ExpenseAmountAsync(CancellationToken cancellationToken = default)
     {
         return await _context.FinancialRecords
         .Where(r => r.RecordType.Name == ExpenseTypeName)
-        .SumAsync(r => r.Amount);
+        .SumAsync(r => r.Amount, cancellationToken);
     }
 
-    public async Task<decimal> TotalAmountAsync()
+    public async Task<decimal> TotalAmountAsync(CancellationToken cancellationToken = default)
     {
         return await _context.FinancialRecords       
-        .SumAsync(r => r.RecordType.Name == ExpenseTypeName ? -r.Amount : r.Amount);
+        .SumAsync(r => r.RecordType.Name == ExpenseTypeName ? -r.Amount : r.Amount, cancellationToken);
     }
 
-    public async Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count = 3)
+    public async Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count = 3, CancellationToken cancellationToken = default)
     {
 
         var entities = await RecordsWithDetails()
         .Where(r => r.RecordType.Name == ExpenseTypeName)
         .OrderByDescending(r => r.Amount)
         .Take(count)
-        .ToListAsync();
+        .ToListAsync(cancellationToken);
 
         return entities.Select(ToModel).Cast<ExpenseRecord>().ToList();
     }
 
-    public async Task<bool> UpdateRecordAsync(FinancialRecord record)
+    public async Task<bool> UpdateRecordAsync(FinancialRecord record, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(record);
         FinancialRecordValidator.Validate(record);
 
         var entity = await _context.FinancialRecords
             .Include(r => r.RecordType)
-            .FirstOrDefaultAsync(r => r.Id == record.Id);
+            .FirstOrDefaultAsync(r => r.Id == record.Id, cancellationToken);
 
         if (entity == null) return false;
 
         if ((record is IncomeRecord) != (entity.RecordType.Name == IncomeTypeName)) 
             throw new ArgumentException("Record type cannot be changed");
 
-        var category = await FindCategoryAsync(record.Category, entity.RecordType.Name);
+        var category = await FindCategoryAsync(record.Category, entity.RecordType.Name, cancellationToken);
 
         entity.Title = record.Title;
         entity.Amount = record.Amount;
@@ -188,14 +188,14 @@ public class EfFinanceService : IFinanceService
         entity.Description = record.Description;
         entity.CategoryId = category.Id;
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
 
         return true;   
     }
 
-    public async Task DeleteAllRecordsAsync()
+    public async Task DeleteAllRecordsAsync(CancellationToken cancellationToken = default)
     {
-        await _context.FinancialRecords.ExecuteDeleteAsync();
+        await _context.FinancialRecords.ExecuteDeleteAsync(cancellationToken);
     }
 
     private IQueryable<FinancialRecordEntity> RecordsWithDetails()
@@ -225,10 +225,10 @@ public class EfFinanceService : IFinanceService
         return record;
     }
 
-    private async Task<Category> FindCategoryAsync(string name, string typeName)
+    private async Task<Category> FindCategoryAsync(string name, string typeName, CancellationToken cancellationToken = default)
     {
         var category = await _context.Categories
-            .FirstOrDefaultAsync(c => c.Name == name && c.RecordType.Name == typeName);
+            .FirstOrDefaultAsync(c => c.Name == name && c.RecordType.Name == typeName, cancellationToken);
 
         if (category is null)
             throw new ArgumentException($"Category '{name}' does not exist for {typeName}");
