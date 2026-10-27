@@ -1,5 +1,4 @@
 ﻿using FinanceTracker.Api.Data;
-using FinanceTracker.Api.Data.Entities;
 using FinanceTracker.Api.Dtos;
 using FinanceTracker.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,7 @@ namespace FinanceTracker.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<CategoryResponse>>> GetAll(RecordTypes? recordType)
+        public async Task<ActionResult<IReadOnlyList<CategoryResponse>>> GetAll(RecordTypes? recordType, CancellationToken cancellationToken)
         {
             var query = _context.Categories.AsQueryable();
 
@@ -37,13 +36,13 @@ namespace FinanceTracker.Api.Controllers
                     Name = c.Name,
                     RecordType = c.RecordType.Name
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryResponse>> GetById(int id)
+        public async Task<ActionResult<CategoryResponse>> GetById(int id, CancellationToken cancellationToken)
         {
             var result = await _context.Categories
                 .Where(c => c.Id == id)
@@ -53,12 +52,11 @@ namespace FinanceTracker.Api.Controllers
                     Name = c.Name,
                     RecordType = c.RecordType.Name
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (result is null) return NotFound();
 
             return Ok(result);
         }
-
     }
 }

@@ -20,6 +20,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         var status = exception switch
         {
             ArgumentException => StatusCodes.Status400BadRequest,
+            OperationCanceledException => 499,
             _ => StatusCodes.Status500InternalServerError
         };
 

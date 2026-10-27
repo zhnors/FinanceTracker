@@ -1,6 +1,5 @@
 ﻿using FinanceTracker.Enums;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace FinanceTracker
 {
@@ -10,7 +9,7 @@ namespace FinanceTracker
 
         List<FinancialRecord> RecordList = new List<FinancialRecord>();
 
-        public Task AddRecordAsync(FinancialRecord record)
+        public Task AddRecordAsync(FinancialRecord record, CancellationToken cancellationToken = default)
         {
             ArgumentNullException.ThrowIfNull(record);
 
@@ -37,7 +36,7 @@ namespace FinanceTracker
             return Task.CompletedTask;
         }
 
-        public Task<bool> DeleteRecordAsync(int id)
+        public Task<bool> DeleteRecordAsync(int id, CancellationToken cancellationToken = default)
         {
             var isFound = false;
             var recordToDelete = RecordList.FirstOrDefault(record => record.Id == id);
@@ -52,14 +51,14 @@ namespace FinanceTracker
             return Task.FromResult(isFound);
         }
 
-        public Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync()
+        public Task<IReadOnlyList<FinancialRecord>> GetAllRecordsAsync(CancellationToken cancellationToken = default)
         {
             IReadOnlyList<FinancialRecord> result = RecordList.ToList();
 
             return Task.FromResult(result);
         }
 
-        public Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category)
+        public Task<IReadOnlyList<FinancialRecord>> SearchByCategoryAsync(string category, CancellationToken cancellationToken = default)
         {
             FinancialRecordValidator.ValidateSearchCategory(category);
 
@@ -68,7 +67,7 @@ namespace FinanceTracker
             return Task.FromResult(result);
         }
 
-        public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date)
+        public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime date, CancellationToken cancellationToken = default)
         {
             FinancialRecordValidator.ValidateSearchDate(date);
             
@@ -77,7 +76,7 @@ namespace FinanceTracker
             return Task.FromResult(result);
         }
 
-        public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate)
+        public Task<IReadOnlyList<FinancialRecord>> SearchByDateAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
         {
             FinancialRecordValidator.ValidateSearchRange(fromDate, toDate);
 
@@ -86,35 +85,35 @@ namespace FinanceTracker
             return Task.FromResult(result);
         }
 
-        public Task<FinancialRecord?> GetRecordByIdAsync(int id)
+        public Task<FinancialRecord?> GetRecordByIdAsync(int id, CancellationToken cancellationToken = default)
         {
             FinancialRecord? result = RecordList.FirstOrDefault(record => record.Id == id);
 
             return Task.FromResult(result);
         }
 
-        public Task<decimal> IncomeAmountAsync()
+        public Task<decimal> IncomeAmountAsync(CancellationToken cancellationToken = default)
         {
             var income = RecordList.OfType<IncomeRecord>().Sum(r => r.Amount);              
 
             return Task.FromResult(income);
         }
 
-        public Task<decimal> ExpenseAmountAsync()
+        public Task<decimal> ExpenseAmountAsync(CancellationToken cancellationToken = default)
         {
             var expense = RecordList.OfType<ExpenseRecord>().Sum(r => r.Amount);              
 
             return Task.FromResult(expense);
         }
 
-        public Task<decimal> TotalAmountAsync()
+        public Task<decimal> TotalAmountAsync(CancellationToken cancellationToken = default)
         {
             var total = RecordList.Sum(r => r is ExpenseRecord ? -r.Amount : r.Amount);
 
             return Task.FromResult(total);
         }
 
-        public Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count)
+        public Task<IReadOnlyList<ExpenseRecord>> GetTopExpensesAsync(int count = 3, CancellationToken cancellationToken = default)
         {
             IReadOnlyList<ExpenseRecord> result = RecordList
                 .OfType<ExpenseRecord>()
@@ -125,7 +124,7 @@ namespace FinanceTracker
             return Task.FromResult(result);
         }
 
-        public Task<bool> UpdateRecordAsync(FinancialRecord record)
+        public Task<bool> UpdateRecordAsync(FinancialRecord record, CancellationToken cancellationToken = default)
         {
             var index = RecordList.FindIndex(r => r.Id == record.Id);
 
@@ -138,7 +137,7 @@ namespace FinanceTracker
             return Task.FromResult(true);
         }
 
-        public Task DeleteAllRecordsAsync()
+        public Task DeleteAllRecordsAsync(CancellationToken cancellationToken = default)
         {
             RecordList.Clear();
 
