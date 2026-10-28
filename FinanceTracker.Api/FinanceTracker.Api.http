@@ -46,7 +46,7 @@ Content-Type: application/json
 
 {
   "title": "Bonus",
-  "amount": 5000,
+  "amount": 6000,
   "date": "2026-10-01",
   "category": "Bonus",
   "description": "Quarterly bonus",
@@ -64,6 +64,17 @@ Content-Type: application/json
   "date": "2026-10-04",
   "category": "Rent",
   "description": "Monthly apartment rent",
+  "recordType": "Expense"
+}
+###
+
+POST {{FinanceTracker.Api_HostAddress}}/records
+Content-Type: application/json
+{
+  "title": "Groceries",
+  "amount": 6000,
+  "date": "2026-10-20",
+  "category": "Food",
   "recordType": "Expense"
 }
 

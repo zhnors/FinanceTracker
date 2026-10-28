@@ -18,6 +18,12 @@ builder.Services.AddScoped<IFinanceService, EfFinanceService>();
 builder.Services.AddDbContext<FinanceDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FinanceDb")));
 
+builder.Services
+    .AddOptions<FinanceOptions>()
+    .Bind(builder.Configuration.GetSection(FinanceOptions.SectionName))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

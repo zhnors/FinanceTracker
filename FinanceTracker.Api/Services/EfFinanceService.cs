@@ -1,13 +1,15 @@
 ﻿using FinanceTracker.Api.Data;
 using FinanceTracker.Api.Data.Entities;
+using FinanceTracker.Api.Infrastructure;
 using FinanceTracker.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace FinanceTracker.Api.Services;
 
 public class EfFinanceService : IFinanceService
 {
-    private const int DemoUserId = 1;
+    public event LargeExpenseDelegate? LargeExpense;
     private const string IncomeTypeName = nameof(RecordTypes.Income);
     private const string ExpenseTypeName = nameof(RecordTypes.Expense);
 
@@ -15,13 +17,16 @@ public class EfFinanceService : IFinanceService
 
     private readonly ILogger<EfFinanceService> _logger;
 
-    public event LargeExpenseDelegate? LargeExpense;
+    private readonly FinanceOptions _options;
 
-    public EfFinanceService(FinanceDbContext context, ILogger<EfFinanceService> logger)
+    public EfFinanceService(
+        FinanceDbContext context,
+        ILogger<EfFinanceService> logger,
+        IOptions<FinanceOptions> options)
     {
         _context = context;
-
         _logger = logger;
+        _options = options.Value;
     }
 
     public async Task AddRecordAsync(FinancialRecord record, CancellationToken cancellationToken = default)
@@ -43,7 +48,7 @@ public class EfFinanceService : IFinanceService
 
             Description = record.Description,
 
-            UserId = DemoUserId,
+            UserId = _options.DemoUserId,
 
             CategoryId = category.Id,
 
@@ -55,7 +60,7 @@ public class EfFinanceService : IFinanceService
 
         record.Id = entity.Id;
 
-        if (record is ExpenseRecord && record.Amount >= FinanceRules.LargeExpenseLimit)
+        if (record is ExpenseRecord && record.Amount >= _options.LargeExpenseLimit)
         {
             LargeExpense?.Invoke(record);
 
