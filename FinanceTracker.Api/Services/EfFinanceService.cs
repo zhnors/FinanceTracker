@@ -13,11 +13,15 @@ public class EfFinanceService : IFinanceService
 
     private readonly FinanceDbContext _context;
 
+    private readonly ILogger<EfFinanceService> _logger;
+
     public event LargeExpenseDelegate? LargeExpense;
 
-    public EfFinanceService(FinanceDbContext context)
+    public EfFinanceService(FinanceDbContext context, ILogger<EfFinanceService> logger)
     {
         _context = context;
+
+        _logger = logger;
     }
 
     public async Task AddRecordAsync(FinancialRecord record, CancellationToken cancellationToken = default)
@@ -54,7 +58,13 @@ public class EfFinanceService : IFinanceService
         if (record is ExpenseRecord && record.Amount >= FinanceRules.LargeExpenseLimit)
         {
             LargeExpense?.Invoke(record);
+
+            _logger.LogWarning("Large expense detected. Id: {RecordId} amount: {Amount}", record.Id, record.Amount);
         }
+
+        _logger.LogInformation("Record {RecordId} created. Record Type: {RecordType}, category: {Category}, amount: {Amount}",
+            record.Id, typeName, category.Name, record.Amount);
+
     }
 
     public async Task<bool> DeleteRecordAsync(int id, CancellationToken cancellationToken = default )
@@ -68,6 +78,8 @@ public class EfFinanceService : IFinanceService
             _context.FinancialRecords.Remove(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
+
+            _logger.LogInformation("Deleted record: {RecordId}", entity.Id);
 
             isFound = true;
         }
@@ -190,12 +202,17 @@ public class EfFinanceService : IFinanceService
 
         await _context.SaveChangesAsync(cancellationToken);
 
+        _logger.LogInformation("Updated record: {RecordId}", entity.Id);
+
         return true;   
     }
 
     public async Task DeleteAllRecordsAsync(CancellationToken cancellationToken = default)
     {
-        await _context.FinancialRecords.ExecuteDeleteAsync(cancellationToken);
+        var count = await _context.FinancialRecords.ExecuteDeleteAsync(cancellationToken);
+
+        _logger.LogWarning("All {Count} records were deleted", count);
+
     }
 
     private IQueryable<FinancialRecordEntity> RecordsWithDetails()
