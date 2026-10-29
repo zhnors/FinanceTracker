@@ -29,4 +29,12 @@ public class FinanceApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         await context.Database.EnsureDeletedAsync();
         await context.Database.MigrateAsync();
     }
+
+    public async Task ResetRecordsAsync()
+    {
+        using var scope = Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<FinanceDbContext>();
+        await context.FinancialRecords.ExecuteDeleteAsync();
+    }
+
 }

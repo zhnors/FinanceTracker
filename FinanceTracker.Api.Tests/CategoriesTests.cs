@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace FinanceTracker.Api.Tests;
 
-public class CategoriesTests : IClassFixture<FinanceApiFactory>
+[Collection(nameof(ApiCollection))]
+public class CategoriesTests
 {
     private readonly HttpClient _client;
 
