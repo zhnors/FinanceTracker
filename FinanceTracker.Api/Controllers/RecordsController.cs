@@ -26,17 +26,18 @@ public class RecordsController : ControllerBase
     [HttpGet("summary")]
     public async Task<IActionResult> Summary(CancellationToken cancellationToken)
     {
-        return Ok(new 
-        {   Income = await _financeService.IncomeAmountAsync(cancellationToken),
+        return Ok(new
+        {
+            Income = await _financeService.IncomeAmountAsync(cancellationToken),
 
             Expense = await _financeService.ExpenseAmountAsync(cancellationToken),
 
-            Total = await _financeService.TotalAmountAsync(cancellationToken) 
+            Total = await _financeService.TotalAmountAsync(cancellationToken)
         });
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<RecordResponse>> GetById(int id, CancellationToken cancellationToken)  
+    public async Task<ActionResult<RecordResponse>> GetById(int id, CancellationToken cancellationToken)
     {
         var result = await _financeService.GetRecordByIdAsync(id, cancellationToken);
 
@@ -71,7 +72,7 @@ public class RecordsController : ControllerBase
 
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRecord(int id, CancellationToken cancellationToken) 
+    public async Task<IActionResult> DeleteRecord(int id, CancellationToken cancellationToken)
     {
         var result = await _financeService.DeleteRecordAsync(id, cancellationToken);
 
@@ -84,10 +85,10 @@ public class RecordsController : ControllerBase
     public async Task<ActionResult<RecordResponse>> Create(CreateRecordRequest request, CancellationToken cancellationToken)
     {
         var record = request.ToRecord();
-            
+
         await _financeService.AddRecordAsync(record, cancellationToken);
 
-        return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());        
+        return CreatedAtAction(nameof(GetById), new { id = record.Id }, record.ToResponse());
     }
 
     [HttpPut("{id}")]
@@ -101,6 +102,6 @@ public class RecordsController : ControllerBase
 
         await _financeService.UpdateRecordAsync(updated, cancellationToken);
 
-        return NoContent();    
+        return NoContent();
     }
 }
