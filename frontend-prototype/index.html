@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceTracker</title>
+</head>
+<body>
+    <header>
+        <h1>FinanceTracker</h1>
+
+        <nav >
+            <ul>
+                <li><a href="#summary">Dashboard</a></li>
+                <li><a href="#records">Records</a></li>
+                <li><a href="#">Categories</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="summary">
+            <h2>Summary</h2>
+
+            <article>
+                <h3>Income</h3>
+                <p>2000</p>
+            </article> 
+
+            <article>
+                <h3>Expense</h3>
+                <p>1000</p>
+            </article>
+
+            <article>
+                <h3>Balance</h3>
+                <p>1000</p>
+            </article>
+        </section>
+
+        <section id="add-record">
+            <h2>Add record</h2>
+            <form>
+                <label for="title">Title</label>
+                <input type="text" id="title" name="title" required maxlength="100">
+
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" name="amount" required min="0.01" step="0.01">
+
+                <label for="date">Date</label>
+                <input type="date" id="date" name="date" required>
+
+                <label for="recordType">Type</label>               
+                <select name="recordType" id="recordType" required>
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                </select>
+
+                <label for="category">Category</label>               
+                <select name="category" id="category" required>
+                    <option value="Salary">Salary</option>
+                    <option value="Gift">Gift</option>
+                    <option value="Food">Food</option>
+                    <option value="Transport">Transport</option>
+                </select>
+
+                <label for="description">Description</label>
+                <textarea id="description" name="description" maxlength="150"></textarea>        
+
+                <button type="submit">Add</button>
+            </form>
+        </section>
+
+        <section id="records">
+            <h2>Records</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>2026-10-01</td>
+                        <td>Test1</td>
+                        <td>Salary</td>
+                        <td>Income</td>
+                        <td>20000</td>
+                        <td>
+                            <button type="button">Edit</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2026-10-08</td>
+                        <td>Test2</td>
+                        <td>Transport</td>
+                        <td>Expense</td>
+                        <td>350</td>
+                        <td>
+                            <button type="button">Edit</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2026-10-05</td>
+                        <td>Test3</td>
+                        <td>Gift</td>
+                        <td>Income</td>
+                        <td>1000</td>
+                        <td>
+                            <button type="button">Edit</button>
+                            <button type="button">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>© 2026 FinanceTracker</p>
+    </footer>
+
+</body>
+</html>
