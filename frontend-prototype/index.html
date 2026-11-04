@@ -1,131 +1,254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FinanceTracker</title>
-</head>
-<body>
-    <header>
-        <h1>FinanceTracker</h1>
-
-        <nav >
-            <ul>
-                <li><a href="#summary">Dashboard</a></li>
-                <li><a href="#records">Records</a></li>
-                <li><a href="#">Categories</a></li>
-            </ul>
-        </nav>
+  </head>
+  <body>
+    <header class="site-header">
+      <img src="#" alt="Finance Tracker logo" class="site-header__logo" />
+      <nav class="main-nav">
+        <ul class="main-nav__list">
+          <li class="main-nav__item">
+            <a href="#" class="main-nav__link">Overview</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="#" class="main-nav__link">Transactions</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="#" class="main-nav__link">Analytics</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="#" class="main-nav__link">Accounts</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="#" class="main-nav__link">Wallet</a>
+          </li>
+        </ul>
+      </nav>
+      <div class="site-header__user">
+        <button
+          type="button"
+          aria-label="Settings"
+          class="site-header__icon-button"
+        ></button>
+        <button
+          type="button"
+          aria-label="Notifications"
+          class="site-header__icon-button"
+        ></button>
+        <img src="#" alt="Avatar" class="site-header__avatar" />
+      </div>
     </header>
     <main>
-        <section id="summary">
-            <h2>Summary</h2>
+      <section class="page-title">
+        <h1 class="page-title__title">Hello, Mark!</h1>
 
-            <article>
-                <h3>Income</h3>
-                <p>2000</p>
-            </article> 
+        <div class="period-tabs">
+          <ul class="period-tabs__list">
+            <li>
+              <button type="button" class="period-tabs__button">
+                This month
+              </button>
+            </li>
+            <li>
+              <button type="button" class="period-tabs__button">
+                Last month
+              </button>
+            </li>
+            <li>
+              <button type="button" class="period-tabs__button">
+                This year
+              </button>
+            </li>
+            <li>
+              <button type="button" class="period-tabs__button">
+                Last 12 months
+              </button>
+            </li>
+          </ul>
 
-            <article>
-                <h3>Expense</h3>
-                <p>1000</p>
-            </article>
+          <button type="button" class="period-tabs__select">
+            <img src="#" alt="" class="period-tabs__select-icon" />
+            Select period
+          </button>
+        </div>
+      </section>
 
-            <article>
-                <h3>Balance</h3>
-                <p>1000</p>
-            </article>
+      <div class="summary">
+        <article class="summary-card">
+          <h2 class="summary-card__title">Balance</h2>
+          <p class="summary-card__amount">$5,502.45</p>
+          <img src="#" alt="" class="summary-card__icon" />
+          <p class="summary-card__change summary-card__change--positive">
+            12.5%
+          </p>
+        </article>
+
+        <article class="summary-card">
+          <h2 class="summary-card__title">Incomes</h2>
+          <p class="summary-card__amount">$9,450.00</p>
+          <img src="#" alt="" class="summary-card__icon" />
+          <p class="summary-card__change summary-card__change--positive">27%</p>
+        </article>
+
+        <article class="summary-card">
+          <h2 class="summary-card__title">Expenses</h2>
+          <p class="summary-card__amount">$3,945.55</p>
+          <img src="#" alt="" class="summary-card__icon" />
+          <p class="summary-card__change summary-card__change--negative">
+            -15%
+          </p>
+        </article>
+      </div>
+
+      <div class="actions">
+        <ul class="actions__list">
+          <li>
+            <button type="button" class="action-card">
+              <img src="#" alt="" class="action-card__icon" />
+              <strong class="action-card__title">Add income</strong>
+              <span class="action-card__description"
+                >Create an income manually</span
+              >
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="action-card">
+              <img src="#" alt="" class="action-card__icon" />
+              <strong class="action-card__title">Add expense</strong>
+              <span class="action-card__description"
+                >Create an expense manually</span
+              >
+            </button>
+          </li>
+
+          <li>
+            <button type="button" class="action-card">
+              <img src="#" alt="" class="action-card__icon" />
+              <strong class="action-card__title">Transfer money</strong>
+              <span class="action-card__description"
+                >Select the amount and make a transfer</span
+              >
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="statistics">
+        <section class="categories">
+          <h2 class="categories__title">Expenses by category</h2>
+          <ul class="categories__list">
+            <li class="category-card">
+              <img src="#" alt="" class="category-card__icon" />
+              <h3 class="category-card__title">Rent</h3>
+              <p class="category-card__percent">41.35%</p>
+            </li>
+            <li class="category-card">
+              <img src="#" alt="" class="category-card__icon" />
+              <h3 class="category-card__title">Entertainment</h3>
+              <p class="category-card__percent">21.51%</p>
+            </li>
+            <li class="category-card">
+              <img src="#" alt="" class="category-card__icon" />
+              <h3 class="category-card__title">Food</h3>
+              <p class="category-card__percent">13.47%</p>
+            </li>
+            <li class="category-card">
+              <img src="#" alt="" class="category-card__icon" />
+              <h3 class="category-card__title">Transport</h3>
+              <p class="category-card__percent">9.97%</p>
+            </li>
+            <li class="category-card">
+              <img src="#" alt="" class="category-card__icon" />
+              <h3 class="category-card__title">Health</h3>
+              <p class="category-card__percent">3.35%</p>
+            </li>
+          </ul>
         </section>
 
-        <section id="add-record">
-            <h2>Add record</h2>
-            <form>
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" required maxlength="100">
+        <section class="transactions">
+          <h2 class="transactions__title">Last transactions</h2>
+          <p class="transactions__description">Check your last transactions</p>
 
-                <label for="amount">Amount</label>
-                <input type="number" id="amount" name="amount" required min="0.01" step="0.01">
+          <table class="transactions-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th aria-label="Actions"></th>
+              </tr>
+            </thead>
 
-                <label for="date">Date</label>
-                <input type="date" id="date" name="date" required>
-
-                <label for="recordType">Type</label>               
-                <select name="recordType" id="recordType" required>
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
-
-                <label for="category">Category</label>               
-                <select name="category" id="category" required>
-                    <option value="Salary">Salary</option>
-                    <option value="Gift">Gift</option>
-                    <option value="Food">Food</option>
-                    <option value="Transport">Transport</option>
-                </select>
-
-                <label for="description">Description</label>
-                <textarea id="description" name="description" maxlength="150"></textarea>        
-
-                <button type="submit">Add</button>
-            </form>
+            <tbody>
+              <tr class="transactions-table__row">
+                <td>Test1</td>
+                <td>2026-10-01</td>
+                <td>Salary</td>
+                <td
+                  class="transactions-table__amount transactions-table__amount--positive"
+                >
+                  +20000
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    aria-label="More actions"
+                    class="transactions-table__menu-button"
+                  >
+                    ⋮
+                  </button>
+                </td>
+              </tr>
+              <tr class="transactions-table__row">
+                <td>Test2</td>
+                <td>2026-10-08</td>
+                <td>Transport</td>
+                <td
+                  class="transactions-table__amount transactions-table__amount--negative"
+                >
+                  -350
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    aria-label="More actions"
+                    class="transactions-table__menu-button"
+                  >
+                    ⋮
+                  </button>
+                </td>
+              </tr>
+              <tr class="transactions-table__row">
+                <td>Test3</td>
+                <td>2026-10-05</td>
+                <td>Gift</td>
+                <td
+                  class="transactions-table__amount transactions-table__amount--positive"
+                >
+                  +1000
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    aria-label="More actions"
+                    class="transactions-table__menu-button"
+                  >
+                    ⋮
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </section>
-
-        <section id="records">
-            <h2>Records</h2>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td>2026-10-01</td>
-                        <td>Test1</td>
-                        <td>Salary</td>
-                        <td>Income</td>
-                        <td>20000</td>
-                        <td>
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2026-10-08</td>
-                        <td>Test2</td>
-                        <td>Transport</td>
-                        <td>Expense</td>
-                        <td>350</td>
-                        <td>
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2026-10-05</td>
-                        <td>Test3</td>
-                        <td>Gift</td>
-                        <td>Income</td>
-                        <td>1000</td>
-                        <td>
-                            <button type="button">Edit</button>
-                            <button type="button">Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+      </div>
     </main>
     <footer>
-        <p>© 2026 FinanceTracker</p>
+      <p>© 2026 FinanceTracker</p>
     </footer>
-
-</body>
+  </body>
 </html>
