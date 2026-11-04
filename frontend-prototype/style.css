@@ -1,3 +1,15 @@
+:root {
+    --color-gray-50: #F9FAFB;
+    --color-gray-100: #ECEFF2;   
+    --color-gray-600: #516778;
+    --color-gray-900: #333E47;
+    --color-gray-950: #22292F;
+    --color-brand-600: #155EEF;
+    --color-error-600: #D92D20;
+    --color-success-500: #17B26A;
+    --color-text: #101828;
+}
+
 *,
 *::before,
 *::after {
@@ -26,9 +38,23 @@ button {
 body {
     font-family: "Inter", sans-serif;
     line-height: 1.5;
+    color: var(--color-text);
+    background-color: var(--color-gray-50);
 }
 
-.page-title__title{
+.main-nav__link {
+    color: var(--color-gray-600);
+}
+
+.period-tabs__button {
+    color: var(--color-gray-600);
+}
+
+.period-tabs__select {
+    color: var(--color-gray-600);
+}
+
+.page-title__title {
     font-size: 1.875rem;
     font-weight: 600;
     line-height: 1.27;
@@ -36,27 +62,57 @@ body {
 
 .summary-card {
     padding: 24px;
-    border: 1px solid #ECEFF2;
+    border: 1px solid var(--color-gray-100);
     border-radius: 12px;
     background-color: white;   
 }
 
-.summary-card__title{
+.summary-card__title {
     font-size: 0.875rem;
     font-weight: 500;
     line-height: 1.43;
+    color: var(--color-gray-600);
 }
 
-.summary-card__amount{
+.summary-card__amount {
     font-size: 2.25rem;
     font-weight: 600;
     line-height: 1.22;
+    color: var(--color-gray-950);
 }
 
-.action-card{ 
+.summary-card__amount--accent {
+    color: var(--color-brand-600);
+}
+
+.action-card { 
     padding: 20px;
-    border: 1px solid #ECEFF2;
+    border: 1px solid var(--color-gray-100);
     border-radius: 12px;
     background-color: white;    
+}
+
+.action-card__title {
+    color: var(--color-gray-900);
+}
+
+.action-card__description {
+    color: var(--color-gray-600);
+}
+
+.categories__title {
+    color: var(--color-gray-900);
+}
+
+.transactions__description {
+    color: var(--color-gray-600);
+}
+
+.transactions-table__amount--positive {
+    color: var(--color-success-500);
+} 
+
+.transactions-table__amount--negative {
+    color: var(--color-text);
 }
 
