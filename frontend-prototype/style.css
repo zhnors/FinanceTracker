@@ -6,9 +6,10 @@
     --color-gray-900: #333E47;
     --color-gray-950: #22292F;
     --color-brand-600: #155EEF;
+    --color-brand-50: #EFF6FF;
     --color-error-600: #D92D20;
     --color-success-500: #17B26A;
-    --color-text: #101828;
+    --color-text: #101828;  
 }
 
 *,
@@ -43,8 +44,42 @@ body {
     background-color: var(--color-gray-50);
 }
 
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+    min-height: 72px;
+    background-color: white;
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.main-nav__list {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
 .main-nav__link {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
     color: var(--color-gray-600);
+    border-radius: 6px;
+}
+
+.main-nav__link--active {
+    color: var(--color-brand-600);
+    background-color: var(--color-brand-50);
+}
+
+.site-header__user {
+    display: flex;
+    gap: 16px;
+    align-items: center;
 }
 
 .period-tabs__button {
@@ -87,7 +122,9 @@ body {
 }
 
 .summary-card__change {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     padding: 2px 10px 2px 8px;
     border: 1px solid var(--color-gray-200);
     border-radius: 6px;
