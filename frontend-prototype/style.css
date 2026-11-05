@@ -1,6 +1,7 @@
 :root {
     --color-gray-50: #F9FAFB;
     --color-gray-100: #ECEFF2;   
+    --color-gray-200: #D5DDE2;   
     --color-gray-600: #516778;
     --color-gray-900: #333E47;
     --color-gray-950: #22292F;
@@ -85,6 +86,17 @@ body {
     color: var(--color-brand-600);
 }
 
+.summary-card__change {
+    display: inline-block;
+    padding: 2px 10px 2px 8px;
+    border: 1px solid var(--color-gray-200);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    line-height: 1.43;
+    font-weight: 500;
+    color: var(--color-gray-950);
+}
+
 .action-card { 
     padding: 20px;
     border: 1px solid var(--color-gray-100);
@@ -93,10 +105,12 @@ body {
 }
 
 .action-card__title {
+    display: block;
     color: var(--color-gray-900);
 }
 
-.action-card__description {
+.action-card__description { 
+    display: block;
     color: var(--color-gray-600);
 }
 
