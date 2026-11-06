@@ -11,6 +11,12 @@
     --color-error-600: #D92D20;
     --color-success-500: #17B26A;
     --color-text: #101828;  
+    --color-bg-add-income: #DCFAE6 ;
+    --color-bg-add-expense: #FEE4E2 ;
+    --color-bg-rent: #9E77ED ;
+    --color-bg-entertainment: #0BA5EC ;
+    --color-bg-food: #4E5BA6 ;
+    --color-bg-transport: #F04438 ;
 }
 
 *,
@@ -97,6 +103,11 @@ main {
     width: 40px;
 }
 
+.site-header__avatar {
+    width: 40px;
+    height: 40px;
+}
+
 .page-title {
     display: flex;
     align-items: start;
@@ -131,6 +142,7 @@ main {
     font-weight: 600;
     line-height: 1.43;
     color: var(--color-gray-600);
+    white-space: nowrap;
 }
 
 .period-tabs__select {
@@ -144,6 +156,12 @@ main {
     font-weight: 600;
     line-height: 1.43;
     color: var(--color-gray-600);
+    white-space: nowrap;
+}
+
+.period-tabs__select-icon {
+    width: 24px;
+    height: 24px;
 }
 
 .summary {
@@ -218,7 +236,26 @@ main {
     width: 100%;
     border: 1px solid var(--color-gray-100);
     border-radius: 12px;
-    background-color: white;    
+    background-color: rgb(255, 255, 255);    
+}
+
+.action-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.action-card__icon--income {
+    background-color: var(--color-bg-add-income);
+}
+
+.action-card__icon--expense {
+    background-color: var(--color-bg-add-expense);
+}
+
+.action-card__icon--transfer {
+    background-color: var(--color-gray-50);
 }
 
 .action-card__title {
@@ -260,6 +297,34 @@ main {
     align-items: center;
     padding: 12px 8px;
 }
+
+.category-card__icon {
+    width: 32px;
+    height: 32px;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.category-card__icon--rent {
+    background-color: var(--color-bg-rent);
+}
+
+.category-card__icon--entertainment {
+    background-color: var(--color-bg-entertainment);
+}
+
+.category-card__icon--food {
+    background-color: var(--color-bg-food);
+}
+
+.category-card__icon--transport {
+    background-color: var(--color-bg-transport);
+}
+
+.category-card__icon--health {
+    background-color: var(--color-success-500);
+}
+
 .category-card__title {
     flex: 1;
     font-size: 1rem;
