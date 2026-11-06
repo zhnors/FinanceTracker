@@ -2,6 +2,7 @@
     --color-gray-50: #F9FAFB;
     --color-gray-100: #ECEFF2;   
     --color-gray-200: #D5DDE2;   
+    --color-gray-500: #668091;
     --color-gray-600: #516778;
     --color-gray-900: #333E47;
     --color-gray-950: #22292F;
@@ -215,12 +216,70 @@ main {
     color: var(--color-gray-600);
 }
 
+.statistics {
+    display: grid;
+    grid-template-columns: 384px 1fr;
+    gap: 32px;
+    padding: 0 32px;
+}
+
+.categories {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 24px;
+    border: 1px solid var(--color-gray-100);
+    border-radius: 12px;
+    background-color: white;
+}
+
 .categories__title {
     color: var(--color-gray-900);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.category-card {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 8px;
+}
+.category-card__title {
+    flex: 1;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.category-card__percent{
+    color: var(--color-gray-500);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.transactions {
+    border: 1px solid var(--color-gray-100);
+    border-radius: 12px;
+    background-color: white;
+}
+
+.transactions__text {
+    padding: 24px;
+}
+
+.transactions__title{
+    font-size: 1.125rem;
+    font-weight: 600;
 }
 
 .transactions__description {
     color: var(--color-gray-600);
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.transactions-table {
+    width: 100%;
 }
 
 .transactions-table__amount--positive {
