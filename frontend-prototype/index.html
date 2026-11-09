@@ -14,7 +14,11 @@
   </head>
   <body>
     <header class="site-header">
-      <img src="images/logo.svg" alt="Finance Tracker logo" class="site-header__logo" />
+      <img
+        src="images/logo.svg"
+        alt="Finance Tracker logo"
+        class="site-header__logo"
+      />
       <nav class="main-nav">
         <ul class="main-nav__list">
           <li class="main-nav__item">
@@ -44,12 +48,24 @@
           type="button"
           aria-label="Settings"
           class="site-header__icon-button"
-        ><img src="images/icon-settings.svg" alt="" class="site-header__icon"></button>
+        >
+          <img
+            src="images/icon-settings.svg"
+            alt=""
+            class="site-header__icon"
+          />
+        </button>
         <button
           type="button"
           aria-label="Notifications"
           class="site-header__icon-button"
-        ><img src="images/icon-notification.svg" alt="" class="site-header__icon"></button>
+        >
+          <img
+            src="images/icon-notification.svg"
+            alt=""
+            class="site-header__icon"
+          />
+        </button>
         <img src="images/avatar.png" alt="Avatar" class="site-header__avatar" />
       </div>
     </header>
@@ -60,29 +76,49 @@
         <div class="period-tabs">
           <ul class="period-tabs__list">
             <li class="period-tabs__item">
-              <button type="button" class="period-tabs__button period-tabs__button--active" aria-pressed="true">
+              <button
+                type="button"
+                class="period-tabs__button period-tabs__button--active"
+                aria-pressed="true"
+              >
                 This month
               </button>
             </li>
             <li class="period-tabs__item">
-              <button type="button" class="period-tabs__button" aria-pressed="false">
+              <button
+                type="button"
+                class="period-tabs__button"
+                aria-pressed="false"
+              >
                 Last month
               </button>
             </li>
             <li class="period-tabs__item">
-              <button type="button" class="period-tabs__button" aria-pressed="false">
+              <button
+                type="button"
+                class="period-tabs__button"
+                aria-pressed="false"
+              >
                 This year
               </button>
             </li>
             <li class="period-tabs__item">
-              <button type="button" class="period-tabs__button" aria-pressed="false">
+              <button
+                type="button"
+                class="period-tabs__button"
+                aria-pressed="false"
+              >
                 Last 12 months
               </button>
             </li>
           </ul>
 
           <button type="button" class="period-tabs__select">
-            <img src="images/icon-select-period.svg" alt="" class="period-tabs__select-icon" />
+            <img
+              src="images/icon-select-period.svg"
+              alt=""
+              class="period-tabs__select-icon"
+            />
             Select period
           </button>
         </div>
@@ -96,7 +132,11 @@
               $5,502.45
             </p>
             <p class="summary-card__change">
-              <img src="images/icon-increase.svg" alt="Increase" class="summary-card__change-icon" />
+              <img
+                src="images/icon-increase.svg"
+                alt="Increase"
+                class="summary-card__change-icon"
+              />
               12.5%
             </p>
           </div>
@@ -107,7 +147,11 @@
           <div class="summary-card__value">
             <p class="summary-card__amount">$9,450.00</p>
             <p class="summary-card__change">
-              <img src="images/icon-increase.svg" alt="Increase" class="summary-card__change-icon" />
+              <img
+                src="images/icon-increase.svg"
+                alt="Increase"
+                class="summary-card__change-icon"
+              />
               27%
             </p>
           </div>
@@ -118,7 +162,11 @@
           <div class="summary-card__value">
             <p class="summary-card__amount">$3,945.55</p>
             <p class="summary-card__change">
-              <img src="images/icon-decrease.svg" alt="Decrease" class="summary-card__change-icon" />
+              <img
+                src="images/icon-decrease.svg"
+                alt="Decrease"
+                class="summary-card__change-icon"
+              />
               -15%
             </p>
           </div>
@@ -129,7 +177,11 @@
         <ul class="actions__list">
           <li class="actions__list-item">
             <button type="button" class="action-card">
-              <img src="images/icon-add-income.svg" alt="" class="action-card__icon action-card__icon--income" />
+              <img
+                src="images/icon-add-income.svg"
+                alt=""
+                class="action-card__icon action-card__icon--income"
+              />
               <span class="action-card__text">
                 <strong class="action-card__title">Add income</strong>
                 <span class="action-card__description"
@@ -141,7 +193,11 @@
 
           <li class="actions__list-item">
             <button type="button" class="action-card">
-              <img src="images/icon-add-expense.svg" alt="" class="action-card__icon action-card__icon--expense" />
+              <img
+                src="images/icon-add-expense.svg"
+                alt=""
+                class="action-card__icon action-card__icon--expense"
+              />
               <span class="action-card__text">
                 <strong class="action-card__title">Add expense</strong>
                 <span class="action-card__description"
@@ -153,7 +209,11 @@
 
           <li class="actions__list-item">
             <button type="button" class="action-card">
-              <img src="images/icon-transfer.svg" alt="" class="action-card__icon action-card__icon--transfer" />
+              <img
+                src="images/icon-transfer.svg"
+                alt=""
+                class="action-card__icon action-card__icon--transfer"
+              />
               <span class="action-card__text">
                 <strong class="action-card__title">Transfer money</strong>
                 <span class="action-card__description"
@@ -170,27 +230,47 @@
           <h2 class="categories__title">Expenses by category</h2>
           <ul class="categories__list">
             <li class="category-card">
-              <img src="images/icon-rent.svg" alt="" class="category-card__icon category-card__icon--rent" />
+              <img
+                src="images/icon-rent.svg"
+                alt=""
+                class="category-card__icon category-card__icon--rent"
+              />
               <h3 class="category-card__title">Rent</h3>
               <p class="category-card__percent">41.35%</p>
             </li>
             <li class="category-card">
-              <img src="images/icon-entertainment.svg" alt="" class="category-card__icon category-card__icon--entertainment" />
+              <img
+                src="images/icon-entertainment.svg"
+                alt=""
+                class="category-card__icon category-card__icon--entertainment"
+              />
               <h3 class="category-card__title">Entertainment</h3>
               <p class="category-card__percent">21.51%</p>
             </li>
             <li class="category-card">
-              <img src="images/icon-food.svg" alt="" class="category-card__icon category-card__icon--food" />
+              <img
+                src="images/icon-food.svg"
+                alt=""
+                class="category-card__icon category-card__icon--food"
+              />
               <h3 class="category-card__title">Food</h3>
               <p class="category-card__percent">13.47%</p>
             </li>
             <li class="category-card">
-              <img src="images/icon-transport.svg" alt="" class="category-card__icon category-card__icon--transport" />
+              <img
+                src="images/icon-transport.svg"
+                alt=""
+                class="category-card__icon category-card__icon--transport"
+              />
               <h3 class="category-card__title">Transport</h3>
               <p class="category-card__percent">9.97%</p>
             </li>
             <li class="category-card">
-              <img src="images/icon-health.svg" alt="" class="category-card__icon category-card__icon--health" />
+              <img
+                src="images/icon-health.svg"
+                alt=""
+                class="category-card__icon category-card__icon--health"
+              />
               <h3 class="category-card__title">Health</h3>
               <p class="category-card__percent">3.35%</p>
             </li>
@@ -217,7 +297,7 @@
 
             <tbody>
               <tr class="transactions-table__row">
-                <td>Test1</td>
+                <td class="transactions-table__title">Test1</td>
                 <td>2026-10-01</td>
                 <td>Salary</td>
                 <td
@@ -231,12 +311,16 @@
                     aria-label="More actions"
                     class="transactions-table__menu-button"
                   >
-                    ⋮
+                    <img
+                      src="images/icon-more.svg"
+                      alt=""
+                      class="transactions-table__menu-icon"
+                    />
                   </button>
                 </td>
               </tr>
               <tr class="transactions-table__row">
-                <td>Test2</td>
+                <td class="transactions-table__title">Test2</td>
                 <td>2026-10-08</td>
                 <td>Transport</td>
                 <td class="transactions-table__amount">-350</td>
@@ -246,12 +330,16 @@
                     aria-label="More actions"
                     class="transactions-table__menu-button"
                   >
-                    ⋮
+                    <img
+                      src="images/icon-more.svg"
+                      alt=""
+                      class="transactions-table__menu-icon"
+                    />
                   </button>
                 </td>
               </tr>
               <tr class="transactions-table__row">
-                <td>Test3</td>
+                <td class="transactions-table__title">Test3</td>
                 <td>2026-10-05</td>
                 <td>Gift</td>
                 <td
@@ -265,7 +353,11 @@
                     aria-label="More actions"
                     class="transactions-table__menu-button"
                   >
-                    ⋮
+                    <img
+                      src="images/icon-more.svg"
+                      alt=""
+                      class="transactions-table__menu-icon"
+                    />
                   </button>
                 </td>
               </tr>

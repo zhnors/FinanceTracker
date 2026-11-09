@@ -408,13 +408,53 @@ a:focus-visible, button:focus-visible {
 
 .transactions-table {
     width: 100%;
+    border-collapse: collapse;
+    color: var(--color-gray-600);
+}
+
+.transactions-table th {
+    text-align: left;
+    border-top: 1px solid var(--color-gray-100);
+    border-bottom: 1px solid var(--color-gray-100);
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 8px 24px;
+    background-color: var(--color-gray-50);
+}
+
+.transactions-table td {
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.transactions-table__row:last-child td {
+    border-bottom: none;
+}
+
+.transactions-table__title{
+    color: var(--color-text);
+}
+
+.transactions-table__amount{
+    color: var(--color-text);
 }
 
 .transactions-table__amount--positive {
     color: var(--color-success-500);
 } 
 
-.transactions-table__amount--negative {
-    color: var(--color-text);
+.transactions-table__menu-button {
+    transition: background-color 0.3s;  
+    border-radius: 6px ;
 }
 
+.transactions-table__menu-button:hover {
+    background-color: var(--color-gray-100);
+}
+
+.transactions-table__menu-icon {
+    height: 20px;
+    width: 20px;
+}
